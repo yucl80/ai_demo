@@ -9,12 +9,13 @@ It includes functions to:
 Each function demonstrates a different aspect of the API's capabilities, showcasing how to make requests
 and handle responses.
 """
-from .jwt_token import get_api_token
+from jwt_token import get_api_token
 from openai import OpenAI
 import os
 
 #base_url = "http://127.0.0.1:8000/v1/"
 base_url = "https://open.bigmodel.cn/api/paas/v4/"
+os.environ["OPENAI_API_KEY"] = get_api_token()
 
 client = OpenAI( base_url=base_url)
 
