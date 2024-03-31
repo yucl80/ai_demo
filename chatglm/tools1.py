@@ -49,12 +49,13 @@ prompt.pretty_print()
 #定义工具
 tools = [pythonREPLTool, wikipedia, search, multiply, add, exponentiate]
 from langchain.agents import create_structured_chat_agent
-
+from jwt_token import get_api_key,get_api_token
 
 
 base_url = "http://127.0.0.1:8000/v1/"
-#base_url = "https://open.bigmodel.cn/api/paas/v1/"
-llm = ChatOpenAI(api_key="APIKEY", base_url=base_url)
+#base_url = "https://open.bigmodel.cn/api/paas/v4/"
+
+llm = ChatOpenAI(api_key=get_api_token(), base_url=base_url,model="glm-4")
 
 # 创建 structured chat agent
 agent = create_structured_chat_agent(llm, tools, prompt)
@@ -65,18 +66,18 @@ agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=T
 
 rep = agent_executor.invoke(
     {
-        "input": "Take 3 to the fifth power and multiply that by the sum of twelve and three, then square the whole result"
+        "input": "12加13等于多少？"
     }
 )
 
 print(rep)
 
-rep = agent_executor.invoke(
-    {
-        "input": "中国平安现在的股票价格是多少？"
-    }
-)
-print(rep)
+#rep = agent_executor.invoke(
+#    {
+#        "input": "中国平安现在的股票价格是多少？"
+#    }
+#)
+#print(rep)
 
 #待排序的customer_list 
 customer_list = [["Harrison", "Chase"], 

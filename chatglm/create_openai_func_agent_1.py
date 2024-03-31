@@ -5,20 +5,22 @@ from jwt_token import get_api_key,get_api_token
 from ChatGLM4 import ChatZhipuAI
 import time
 import langchain
-#langchain.debug = True
+langchain.debug = True
 from langchain_openai import ChatOpenAI
-from langchain.agents import create_structured_chat_agent
+from langchain.agents import  create_openai_functions_agent
 from langchain import hub
 from langchain_community.tools import ShellTool
 
 @tool
 def multiply(first_int: int, second_int: int) -> int:
     """Multiply two integers together."""
+    print("call multiply")
     return first_int * second_int
 
 @tool
 def add(first_int: int, second_int: int) -> int:
     "Add two integers."
+    print("call add")
     return first_int + second_int
 
 @tool
@@ -31,20 +33,21 @@ def get_word_length(word: str) -> int:
     """Returns the length of a word."""
     return len(word)
 
-print(multiply.name)
-print(multiply.description)
-print(multiply.args)
+#print(multiply.name)
+#print(multiply.description)
+#print(multiply.args)
 
 pythonREPLTool = PythonREPLTool()
 
 shell_tool = ShellTool()
 
 
-prompt = hub.pull("hwchase17/structured-chat-agent")
-#prompt.pretty_print()
+prompt = hub.pull("hwchase17/openai-tools-agent")
+print(prompt)
+prompt.pretty_print()
 
 #定义工具
-tools = [pythonREPLTool,  get_word_length,  multiply, add, exponentiate]
+tools = [  get_word_length,  multiply, add, exponentiate]
 
 def get_glm(temprature):
     llm = ChatOpenAI(
@@ -55,7 +58,7 @@ def get_glm(temprature):
         openai_api_key=get_api_token(),
         streaming=False,
         temperature=temprature,
-        timeout= 60,
+        timeout= 180,
     )
     
     return llm
@@ -70,16 +73,18 @@ def get_glm(temprature):
 
 llm = get_glm(0.01)
 # 创建 structured chat agent
-agent = create_structured_chat_agent(llm, tools, prompt)
+#agent = create_structured_chat_agent(llm, tools, prompt)
+agent = create_openai_functions_agent(llm,tools,prompt)
 
 from langchain.agents import AgentExecutor
 # 传入agent和tools来创建Agent执行器
-agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True, verbose=False)
+agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True, verbose=True, max_execution_time=240)
 
-#rep = agent_executor.invoke(  { "input": "Take 3 to the fifth power and multiply that by the sum of twelve and three, then square the whole result"   })
+
 st = time.perf_counter()
 #rep = agent_executor.invoke(  { "input": "How many letters in the word eudca"   })
-rep = agent_executor.invoke(  { "input": "打印当前程序的执行目录"   })
+#rep = agent_executor.invoke(  { "input": "请编写python程序实现打印操作系统的当前时间的功能，并执行这个程序"   })
+rep = agent_executor.invoke(  { "input": "Take 3 to the fifth power and multiply that by the sum of twelve and three, then square the whole result"   })
 et = time.perf_counter() - st
 print("search time:", et)
 print(rep)

@@ -9,8 +9,10 @@ import langchain
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_structured_chat_agent
 from langchain import hub
-from langchain_community.tools import ShellTool
+#from langchain_community.tools import ShellTooll
 from langchain.agents import AgentType, initialize_agent
+from langchain.agents.format_scratchpad.openai_tools import format_to_openai_tool_messages
+from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputParser
 
 @tool
 def multiply(first_int: int, second_int: int) -> int:
@@ -31,6 +33,7 @@ def exponentiate(base: int, exponent: int) -> int:
 @tool
 def get_word_length(word: str) -> int:
     """Returns the length of a word."""
+    print("call get_word_length")   
     return len(word)
 
 #print(multiply.name)
@@ -39,55 +42,66 @@ def get_word_length(word: str) -> int:
 
 pythonREPLTool = PythonREPLTool()
 
-
-
 prompt = hub.pull("hwchase17/structured-chat-agent")
 #prompt.pretty_print()
 
-
-
-def get_glm(temprature):
-    llm = ChatOpenAI(
+llm = ChatOpenAI(
         model_name="glm-3-turbo",
 #        model_name = "glm-4",
- #       openai_api_base="https://open.bigmodel.cn/api/paas/v4",
+#        openai_api_base="https://open.bigmodel.cn/api/paas/v4",
         openai_api_base="http://127.0.0.1:8000/v1/",
         openai_api_key=get_api_token(),
         streaming=False,
-        temperature=temprature,
-        timeout= 60,
+        temperature=0.01,
+        timeout= 180,
     )    
-    return llm
+   
 
+#定义工具
+tools = [ get_word_length,  multiply, add, exponentiate ,pythonREPLTool]
 
-llm = get_glm(0.01)
+def convert_tools(tools):
+    return "\n".join([f"{tool.name}: {tool.description}" for tool in tools])
+
+def convert_tool_names(tools):
+    return "\n".join([f"{tool.name}" for tool in tools])
+
+# agent = (
+#     {
+        
+#         "input": lambda x: x["input"],           
+#         "agent_scratchpad": lambda x: format_to_openai_tool_messages(
+#             x["intermediate_steps"]
+#         ),
+#     }
+#     | prompt.partial( tools= {"tools":[ {"get_word_length":{ "name":"get word length"}}]}, tool_names={"tool_names":["get_word_length"]})
+    
+#     | llm
+# )
+
 # 创建 structured chat agent
-#agent = create_structured_chat_agent(llm, tools, prompt)
+agent = create_structured_chat_agent(llm, tools, prompt)
+
 
 from langchain.agents import AgentExecutor
 # 传入agent和tools来创建Agent执行器
-#agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True, verbose=False)
+agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True, verbose=True)
 
 #rep = agent_executor.invoke(  { "input": "Take 3 to the fifth power and multiply that by the sum of twelve and three, then square the whole result"   })
 st = time.perf_counter()
-#rep = agent_executor.invoke(  { "input": "How many letters in the word eudca"   })
+rep = agent_executor.invoke(  { "input": "How many letters in the word eudca" })
 et = time.perf_counter() - st
 print("search time:", et)
-#print(rep)
+print(rep)
 
-shell_tool = ShellTool()
-shell_tool.description = shell_tool.description + f"args {shell_tool.args}".replace(
-    "{", "{{"
-).replace("}", "}}")
 
-#定义工具
-tools = [pythonREPLTool, shell_tool , get_word_length,  multiply, add, exponentiate]
+
 
 #self_ask_with_search = initialize_agent( [shell_tool], llm, agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
-agent = create_structured_chat_agent(llm, tools, prompt)
+#agent = create_structured_chat_agent(llm, tools, prompt)
 
-agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True, verbose=True)
+#agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True, verbose=True)
 
 
-#agent_executor.invoke( {"input":"Download the langchain.com webpage and grep for all urls. Return only a sorted list of them. Be sure to use double quotes."})
+#rep = agent_executor.invoke( {"input":"Download the langchain.com webpage and grep for all urls. Return only a sorted list of them. Be sure to use double quotes."})
 

@@ -1,5 +1,5 @@
 from llama_cpp import Llama
-llm = Llama(model_path="/home/test/src/llama.cpp/models/llama-2-13b-chat.Q4_K_M.gguf", chat_format="chatml-function-calling")
+llm = Llama(model_path="/home/test/llm-models/llama-2-13b-chat.Q4_K_M.gguf", chat_format="chatml-function-calling")
 rep = llm.create_chat_completion(
     messages = [
         {

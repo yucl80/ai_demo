@@ -1,9 +1,12 @@
 import openai
+import time
 
 client = openai.OpenAI(
-    base_url="http://localhost:8080/v1", # "http://<Your api-server IP>:port"
+    base_url="http://localhost:8000/v1", # "http://<Your api-server IP>:port"
     api_key = "sk-no-key-required"
 )
+
+st = time.perf_counter()
 
 completion = client.chat.completions.create(
 model="gpt-3.5-turbo",
@@ -13,5 +16,8 @@ messages=[
 ]
 )
 
+et = time.perf_counter()
+
+print("used time:" + str(et-st))
 
 print(completion.choices[0].message)

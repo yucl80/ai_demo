@@ -19,11 +19,12 @@ prompt_template = ChatPromptTemplate.from_messages(template_messages)
 from langchain_community.llms import HuggingFaceTextGenInference
 
 llm = HuggingFaceTextGenInference(
-    inference_server_url="http://127.0.0.1:11434/",
+    inference_server_url="http://127.0.0.1:8000/v1",
     max_new_tokens=512,
     top_k=50,
     temperature=0.1,
     repetition_penalty=1.03,
+    timeout=120
 )
 
 model = Llama2Chat(llm=llm)
