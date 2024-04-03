@@ -1,15 +1,20 @@
 #https://blog.csdn.net/yuanmintao/article/details/136268609?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-136268609-blog-136146210.235%5Ev43%5Epc_blog_bottom_relevance_base2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-136268609-blog-136146210.235%5Ev43%5Epc_blog_bottom_relevance_base2
+import time
+
+from ChatGLM4 import ChatZhipuAI
+from jwt_token import get_api_key, get_api_token
 from langchain_core.tools import tool
 from langchain_experimental.tools import PythonREPLTool
-from jwt_token import get_api_key,get_api_token
-from ChatGLM4 import ChatZhipuAI
-import time
+
 import langchain
+
 langchain.debug = True
-from langchain_openai import ChatOpenAI
-from langchain.agents import  create_openai_functions_agent
-from langchain import hub
 from langchain_community.tools import ShellTool
+from langchain_openai import ChatOpenAI
+
+from langchain import hub
+from langchain.agents import create_openai_functions_agent
+
 
 @tool
 def multiply(first_int: int, second_int: int) -> int:
@@ -77,6 +82,7 @@ llm = get_glm(0.01)
 agent = create_openai_functions_agent(llm,tools,prompt)
 
 from langchain.agents import AgentExecutor
+
 # 传入agent和tools来创建Agent执行器
 agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True, verbose=True, max_execution_time=240)
 

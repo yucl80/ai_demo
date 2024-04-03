@@ -1,14 +1,18 @@
+import time
+
+from jwt_token import get_api_key, get_api_token
 from langchain_core.tools import tool
 from langchain_experimental.tools import PythonREPLTool
-from jwt_token import get_api_key,get_api_token
-import time
-import langchain
 #langchain.debug = True
 from langchain_openai import ChatOpenAI
+
+import langchain
 from langchain import hub
 from langchain.agents import AgentExecutor, create_structured_chat_agent
-from langchain.agents.format_scratchpad.openai_tools import format_to_openai_tool_messages
-from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputParser
+from langchain.agents.format_scratchpad.openai_tools import \
+    format_to_openai_tool_messages
+from langchain.agents.output_parsers.openai_tools import \
+    OpenAIToolsAgentOutputParser
 
 
 @tool

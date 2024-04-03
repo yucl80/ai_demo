@@ -1,0 +1,54 @@
+{
+    "owner": "rlm",
+    "repo": "rag-prompt-llama",
+    "commit_hash": "693a2db5447e3b58c060a6ac02758dc7f1aaaaa4ee6214d127bf70b443158630",
+    "manifest": {
+        "id": [
+            "langchain",
+            "prompts",
+            "chat",
+            "ChatPromptTemplate"
+        ],
+        "lc": 1,
+        "type": "constructor",
+        "kwargs": {
+            "messages": [
+                {
+                    "id": [
+                        "langchain",
+                        "prompts",
+                        "chat",
+                        "HumanMessagePromptTemplate"
+                    ],
+                    "lc": 1,
+                    "type": "constructor",
+                    "kwargs": {
+                        "prompt": {
+                            "id": [
+                                "langchain",
+                                "prompts",
+                                "prompt",
+                                "PromptTemplate"
+                            ],
+                            "lc": 1,
+                            "type": "constructor",
+                            "kwargs": {
+                                "template": "[INST]<<SYS>> You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise.<</SYS>> \nQuestion: {question} \nContext: {context} \nAnswer: [/INST]",
+                                "input_variables": [
+                                    "question",
+                                    "context"
+                                ],
+                                "template_format": "f-string"
+                            }
+                        }
+                    }
+                }
+            ],
+            "input_variables": [
+                "question",
+                "context"
+            ]
+        }
+    },
+    "examples": []
+}

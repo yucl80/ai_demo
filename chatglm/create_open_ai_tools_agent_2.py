@@ -1,19 +1,25 @@
 #https://blog.csdn.net/yuanmintao/article/details/136268609?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-136268609-blog-136146210.235%5Ev43%5Epc_blog_bottom_relevance_base2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-136268609-blog-136146210.235%5Ev43%5Epc_blog_bottom_relevance_base2
+import time
+
+from ChatGLM4 import ChatZhipuAI
+from jwt_token import get_api_key, get_api_token
 from langchain_core.tools import tool
 from langchain_experimental.tools import PythonREPLTool
-from jwt_token import get_api_key,get_api_token
-from ChatGLM4 import ChatZhipuAI
-import time
+
 import langchain
+
 langchain.debug = False
-from langchain_openai import ChatOpenAI
-from langchain.agents import create_structured_chat_agent,create_openai_tools_agent
-from langchain import hub
 from langchain_community.tools import ShellTool
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.agents.format_scratchpad.openai_tools import format_to_openai_tool_messages
-from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputParser
+from langchain_openai import ChatOpenAI
 
+from langchain import hub
+from langchain.agents import (create_openai_tools_agent,
+                              create_structured_chat_agent)
+from langchain.agents.format_scratchpad.openai_tools import \
+    format_to_openai_tool_messages
+from langchain.agents.output_parsers.openai_tools import \
+    OpenAIToolsAgentOutputParser
 
 prompt = hub.pull("hwchase17/openai-tools-agent")
 

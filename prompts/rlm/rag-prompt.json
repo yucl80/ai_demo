@@ -1,0 +1,54 @@
+{
+    "owner": "rlm",
+    "repo": "rag-prompt",
+    "commit_hash": "50442af133e61576e74536c6556cefe1fac147cad032f4377b60c436e6cdcb6e",
+    "manifest": {
+        "id": [
+            "langchain",
+            "prompts",
+            "chat",
+            "ChatPromptTemplate"
+        ],
+        "lc": 1,
+        "type": "constructor",
+        "kwargs": {
+            "messages": [
+                {
+                    "id": [
+                        "langchain",
+                        "prompts",
+                        "chat",
+                        "HumanMessagePromptTemplate"
+                    ],
+                    "lc": 1,
+                    "type": "constructor",
+                    "kwargs": {
+                        "prompt": {
+                            "id": [
+                                "langchain",
+                                "prompts",
+                                "prompt",
+                                "PromptTemplate"
+                            ],
+                            "lc": 1,
+                            "type": "constructor",
+                            "kwargs": {
+                                "template": "You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise.\nQuestion: {question} \nContext: {context} \nAnswer:",
+                                "input_variables": [
+                                    "question",
+                                    "context"
+                                ],
+                                "template_format": "f-string"
+                            }
+                        }
+                    }
+                }
+            ],
+            "input_variables": [
+                "question",
+                "context"
+            ]
+        }
+    },
+    "examples": []
+}

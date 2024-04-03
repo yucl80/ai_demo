@@ -1,0 +1,10 @@
+setup.py
+yucl_utils/HttpEmbeddingsClient.py
+yucl_utils/__init__.py
+yucl_utils/hub_helper.py
+yucl_utils/log_pip.py
+yucl_utils.egg-info/PKG-INFO
+yucl_utils.egg-info/SOURCES.txt
+yucl_utils.egg-info/dependency_links.txt
+yucl_utils.egg-info/requires.txt
+yucl_utils.egg-info/top_level.txt
