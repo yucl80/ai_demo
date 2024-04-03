@@ -1,7 +1,7 @@
 from zhipuai import ZhipuAI
 from sentence_transformers import SentenceTransformer, util
 import torch
-from jwt_token import get_api_key
+from code.deploy.yucl_utils.jwt_token import get_api_key
 
 client = ZhipuAI(api_key=get_api_key()) 
 corpus = ["我爱你", "我恨你" ,"我喜欢你","我讨厌你","我不喜欢你","我不爱你","I love you","I like you","I hate you","I don't like you"];

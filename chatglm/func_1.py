@@ -1,6 +1,6 @@
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_openai import ChatOpenAI
-from jwt_token import get_api_token
+from code.deploy.yucl_utils.jwt_token import get_api_token
 
 # Note that the docstrings here are crucial, as they will be passed along
 # to the model along with the class name.

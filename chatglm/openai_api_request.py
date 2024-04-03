@@ -9,7 +9,7 @@ It includes functions to:
 Each function demonstrates a different aspect of the API's capabilities, showcasing how to make requests
 and handle responses.
 """
-from jwt_token import get_api_token
+from code.deploy.yucl_utils.jwt_token import get_api_token
 from openai import OpenAI
 import os
 

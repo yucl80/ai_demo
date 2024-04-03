@@ -2,7 +2,7 @@
 import time
 
 from ChatGLM4 import ChatZhipuAI
-from jwt_token import get_api_key, get_api_token
+from code.deploy.yucl_utils.jwt_token import get_api_key, get_api_token
 from langchain_core.tools import tool
 from langchain_experimental.tools import PythonREPLTool
 

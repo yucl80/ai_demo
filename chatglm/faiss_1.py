@@ -4,7 +4,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import CharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceBgeEmbeddings,HuggingFaceInferenceAPIEmbeddings
 
-from jwt_token import get_api_token
+from code.deploy.yucl_utils.jwt_token import get_api_token
 
 loader = TextLoader("state_of_the_union.txt")
 documents = loader.load()

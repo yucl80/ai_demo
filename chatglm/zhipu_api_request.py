@@ -13,7 +13,7 @@ variable formate as xxx.xxx (just for check, not need a real key).
 """
 
 from zhipuai import ZhipuAI
-from jwt_token import get_api_key
+from code.deploy.yucl_utils.jwt_token import get_api_key
 import os
 
 #base_url = "http://127.0.0.1:8000/v1/"

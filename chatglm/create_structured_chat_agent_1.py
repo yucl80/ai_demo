@@ -2,11 +2,9 @@
 import time
 
 from ChatGLM4 import ChatZhipuAI
-from jwt_token import get_api_key, get_api_token
 from langchain_core.tools import tool
 from langchain_experimental.tools import PythonREPLTool
 #langchain.debug = True
-from langchain_openai import ChatOpenAI
 
 import langchain
 from langchain import hub
@@ -21,6 +19,8 @@ from langchain.agents.output_parsers.openai_tools import \
 from yucl_utils import create_llm ,pull_repo
 
 
+
+
 @tool
 def get_word_length(word: str) -> int:
     """Returns the length of a word."""
@@ -33,7 +33,7 @@ def get_word_length(word: str) -> int:
 
 pythonREPLTool = PythonREPLTool()
 #prompt = pull_repo("hwchase17/structured-chat-agent")
-prompt = hub.pull("hwchase17/structured-chat-agent")
+prompt = pull_repo("hwchase17/structured-chat-agent")
 #prompt.pretty_print()
 
 llm = create_llm()

@@ -3,7 +3,7 @@ from langchain.prompts import PromptTemplate
 from langchain.schema.messages import AIMessage
 from langchain_community.llms.chatglm3 import ChatGLM3
 from langchain_openai import ChatOpenAI
-from jwt_token import get_api_token
+from code.deploy.yucl_utils.jwt_token import get_api_token
 
 template = """{question}"""
 prompt = PromptTemplate.from_template(template)

@@ -1,4 +1,4 @@
-from jwt_token import get_api_key,get_api_token
+from code.deploy.yucl_utils.jwt_token import get_api_key,get_api_token
 import os
 os.environ["OPENAI_API_KEY"] = get_api_token()
 

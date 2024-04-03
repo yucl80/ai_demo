@@ -2,7 +2,7 @@
 
 from langchain_openai import ChatOpenAI
 #from langchain.chat_models import ChatOpenAI
-from jwt_token import get_api_token
+from code.deploy.yucl_utils.jwt_token import get_api_token
 from langchain_community.llms.chatglm3 import ChatGLM3
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core import utils
