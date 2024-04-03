@@ -2,7 +2,7 @@
 import time
 
 from ChatGLM4 import ChatZhipuAI
-from code.deploy.yucl_utils.jwt_token import get_api_key, get_api_token
+
 from langchain_core.tools import tool
 from langchain_experimental.tools import PythonREPLTool
 
@@ -10,7 +10,7 @@ import langchain
 
 langchain.debug = True
 from langchain_community.tools import ShellTool
-from langchain_openai import ChatOpenAI
+from yucl.utils import create_llm
 
 from langchain import hub
 from langchain.agents import create_openai_functions_agent
@@ -54,29 +54,8 @@ prompt.pretty_print()
 #定义工具
 tools = [  get_word_length,  multiply, add, exponentiate]
 
-def get_glm(temprature):
-    llm = ChatOpenAI(
-        model_name="glm-3-turbo",
-#        model_name = "glm-4",
-#        openai_api_base="https://open.bigmodel.cn/api/paas/v4",
-        openai_api_base="http://127.0.0.1:8000/v1/",
-        openai_api_key=get_api_token(),
-        streaming=False,
-        temperature=temprature,
-        timeout= 180,
-    )
-    
-    return llm
-#llm = get_glm(0.01)
-#llm = ChatZhipuAI(
-#   endpoint_url="https://127.0.0.1/api/paas/v1/",
-#   endpoint_url = "https://open.bigmodel.cn/api/paas/v4"
-#   temperature=0.1,
-#   api_key=get_api_key(),
-#   model_name="glm-3-turbo",
-#)
 
-llm = get_glm(0.01)
+llm = create_llm()
 # 创建 structured chat agent
 #agent = create_structured_chat_agent(llm, tools, prompt)
 agent = create_openai_functions_agent(llm,tools,prompt)

@@ -3,7 +3,6 @@ import time
 from typing import Any, List, Optional, Sequence, Tuple, Union
 
 from ChatGLM4 import ChatZhipuAI
-from code.deploy.yucl_utils.jwt_token import get_api_key, get_api_token
 from langchain_core._api import deprecated
 from langchain_core.agents import AgentAction
 from langchain_core.callbacks import BaseCallbackManager
@@ -17,7 +16,6 @@ from langchain_core.runnables import Runnable, RunnablePassthrough
 from langchain_core.tools import BaseTool, tool
 from langchain_experimental.tools import PythonREPLTool
 #langchain.debug = True
-from langchain_openai import ChatOpenAI
 
 import langchain
 from langchain import hub
@@ -39,7 +37,7 @@ from langchain.agents.structured_chat.prompt import (FORMAT_INSTRUCTIONS,
 from langchain.chains.llm import LLMChain
 from langchain.tools.render import (ToolsRenderer,
                                     render_text_description_and_args)
-
+from yucl.utils import create_llm
 
 @tool
 def get_word_length(word: str) -> int:
@@ -56,16 +54,7 @@ pythonREPLTool = PythonREPLTool()
 prompt = hub.pull("hwchase17/structured-chat-agent")
 #prompt.pretty_print()
 
-llm = ChatOpenAI(
-        model_name="glm-3-turbo",
-#        model_name = "glm-4",
-#        openai_api_base="https://open.bigmodel.cn/api/paas/v4",
-        openai_api_base="http://127.0.0.1:8000/v1/",
-        openai_api_key=get_api_token(),
-        streaming=False,
-        temperature=0.01,
-        timeout= 180,
-    )    
+llm = create_llm( )    
    
 
 #定义工具

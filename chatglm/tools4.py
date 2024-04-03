@@ -18,12 +18,12 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_experimental.tools import PythonREPLTool
 import json
 from langchain_core.agents import AgentActionMessageLog, AgentFinish
-from code.deploy.yucl_utils.jwt_token import get_api_key,get_api_token
 from ChatGLM4 import ChatZhipuAI
 import time
 import langchain
 #langchain.debug = True
 from typing import List
+from yucl.utils import  create_llm
 
 
 class Response(BaseModel):
@@ -68,21 +68,8 @@ prompt = hub.pull("rlm/rag-prompt")
 #prompt.pretty_print()
 
 
-
-
-
-llm = ChatOpenAI(
-        model_name="glm-3-turbo",
-#        model_name = "glm-4",
-#        openai_api_base="https://open.bigmodel.cn/api/paas/v4",
-       openai_api_base="http://127.0.0.1:8000/v1/",
-        openai_api_key=get_api_token(),
-        streaming=False,
-        temperature=0.01,
-        timeout= 60,
-    )    
+llm = create_llm()    
     
-
 
 model_name = "BAAI/bge-m3"
 model_kwargs = {"device": "cpu"}

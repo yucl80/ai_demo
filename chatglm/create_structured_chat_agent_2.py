@@ -1,11 +1,4 @@
 import time
-
-from code.deploy.yucl_utils.jwt_token import get_api_key, get_api_token
-from langchain_core.tools import tool
-from langchain_experimental.tools import PythonREPLTool
-#langchain.debug = True
-from langchain_openai import ChatOpenAI
-
 import langchain
 from langchain import hub
 from langchain.agents import AgentExecutor, create_structured_chat_agent
@@ -13,6 +6,10 @@ from langchain.agents.format_scratchpad.openai_tools import \
     format_to_openai_tool_messages
 from langchain.agents.output_parsers.openai_tools import \
     OpenAIToolsAgentOutputParser
+from langchain_core.tools import tool
+from langchain_experimental.tools import PythonREPLTool
+#langchain.debug = True
+from yucl.utils import create_llm
 
 
 @tool
@@ -36,17 +33,7 @@ prompt = ChatPromptTemplate.from_messages(
 pythonREPLTool = PythonREPLTool()
 
 #prompt.pretty_print()
-llm = ChatOpenAI(
-        model_name="glm-3-turbo",
-#        model_name = "glm-4",
-#        openai_api_base="https://open.bigmodel.cn/api/paas/v4",
-        openai_api_base="http://127.0.0.1:8000/v1/",
-        openai_api_key=get_api_token(),
-        streaming=False,
-        temperature=0.001,
-        timeout= 180,
-    )    
-   
+llm = create_llm()
 
 #定义工具
 tools = [ get_word_length]

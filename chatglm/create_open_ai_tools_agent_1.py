@@ -2,7 +2,6 @@
 import time
 
 from ChatGLM4 import ChatZhipuAI
-from code.deploy.yucl_utils.jwt_token import get_api_key, get_api_token
 from langchain_core.tools import tool
 from langchain_experimental.tools import PythonREPLTool
 
@@ -20,7 +19,7 @@ from langchain.agents.format_scratchpad.openai_tools import \
     format_to_openai_tool_messages
 from langchain.agents.output_parsers.openai_tools import \
     OpenAIToolsAgentOutputParser
-
+from yucl.utils import create_llm
 
 @tool
 def multiply(first_int: int, second_int: int) -> int:
@@ -75,20 +74,8 @@ tools = [ get_word_length,  multiply, add, exponentiate]
 #tools = [ get_word_length]
 #tools = [ ]
 
-def get_glm(temprature):
-    llm = ChatOpenAI(
-        model_name="glm-3-turbo",
-#        model_name = "glm-4",
-#        openai_api_base="https://open.bigmodel.cn/api/paas/v4",
-        openai_api_base="http://127.0.0.1:8000/v1/",
-        openai_api_key=get_api_token(),
-        streaming=False,
-        temperature=temprature,
-        timeout= 180,
-    )
-    
-    return llm
-llm = get_glm(0.01)
+
+llm = create_llm()
 
 
 llm_with_tools = llm.bind_tools(tools)

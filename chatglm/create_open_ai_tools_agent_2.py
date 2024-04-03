@@ -2,7 +2,6 @@
 import time
 
 from ChatGLM4 import ChatZhipuAI
-from code.deploy.yucl_utils.jwt_token import get_api_key, get_api_token
 from langchain_core.tools import tool
 from langchain_experimental.tools import PythonREPLTool
 
@@ -20,7 +19,7 @@ from langchain.agents.format_scratchpad.openai_tools import \
     format_to_openai_tool_messages
 from langchain.agents.output_parsers.openai_tools import \
     OpenAIToolsAgentOutputParser
-
+from yucl.utils import create_llm
 prompt = hub.pull("hwchase17/openai-tools-agent")
 
 prompt.pretty_print()
@@ -46,16 +45,7 @@ pythonrepl =  PythonREPLTool()
 tools = [ multiply,add,exponentiate, pythonrepl]
 
 
-llm = ChatOpenAI(
-        model_name="glm-4",
-#        model_name = "glm-4",
-#          openai_api_base="https://open.bigmodel.cn/api/paas/v4",
-       openai_api_base="http://127.0.0.1:8000/v1/",
-        openai_api_key=get_api_token(),
-        streaming=False,
-        temperature=0.01,
-        timeout= 180,
-    )
+llm = create_llm()
 
 agent = create_openai_tools_agent(llm,tools,prompt)
 

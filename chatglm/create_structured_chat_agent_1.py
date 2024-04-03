@@ -16,7 +16,7 @@ from langchain.agents.format_scratchpad.openai_tools import \
 from langchain.agents.output_parsers.openai_tools import \
     OpenAIToolsAgentOutputParser
 
-from yucl_utils import create_llm ,pull_repo
+from yucl.utils import create_llm ,pull_repo
 
 
 
