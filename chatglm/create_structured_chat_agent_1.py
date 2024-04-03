@@ -17,7 +17,8 @@ from langchain.agents.format_scratchpad.openai_tools import \
     format_to_openai_tool_messages
 from langchain.agents.output_parsers.openai_tools import \
     OpenAIToolsAgentOutputParser
-from hub_helper import pull_repo
+
+from yucl_utils import create_llm ,pull_repo
 
 
 @tool
@@ -35,16 +36,7 @@ pythonREPLTool = PythonREPLTool()
 prompt = hub.pull("hwchase17/structured-chat-agent")
 #prompt.pretty_print()
 
-llm = ChatOpenAI(
-        model_name="glm-3-turbo",
-#        model_name = "glm-4",
-#        openai_api_base="https://open.bigmodel.cn/api/paas/v4",
-        openai_api_base="http://127.0.0.1:8000/v1/",
-        openai_api_key=get_api_token(),
-        streaming=False,
-        temperature=0.01,
-        timeout= 180,
-    )    
+llm = create_llm()
    
 
 #定义工具

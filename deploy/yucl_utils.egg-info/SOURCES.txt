@@ -2,6 +2,7 @@ setup.py
 yucl_utils/HttpEmbeddingsClient.py
 yucl_utils/__init__.py
 yucl_utils/hub_helper.py
+yucl_utils/llm_builder.py
 yucl_utils/log_pip.py
 yucl_utils.egg-info/PKG-INFO
 yucl_utils.egg-info/SOURCES.txt
