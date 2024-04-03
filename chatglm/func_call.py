@@ -1,5 +1,5 @@
 from zhipuai import ZhipuAI
-from code.deploy.yucl_utils.jwt_token import get_api_key
+from yucl.utils import get_api_key
 from openai import OpenAI
 import os
 

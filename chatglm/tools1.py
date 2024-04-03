@@ -1,7 +1,7 @@
 #https://blog.csdn.net/yuanmintao/article/details/136268609?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-136268609-blog-136146210.235%5Ev43%5Epc_blog_bottom_relevance_base2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-136268609-blog-136146210.235%5Ev43%5Epc_blog_bottom_relevance_base2
 from langchain_core.tools import tool
 from langchain_experimental.tools import PythonREPLTool
-from code.deploy.yucl_utils.jwt_token import get_api_key
+from yucl.utils import get_api_key
 from ChatGLM4 import ChatZhipuAI
 from langchain_openai import ChatOpenAI
 import langchain
@@ -49,7 +49,7 @@ prompt.pretty_print()
 #定义工具
 tools = [pythonREPLTool, wikipedia, search, multiply, add, exponentiate]
 from langchain.agents import create_structured_chat_agent
-from code.deploy.yucl_utils.jwt_token import get_api_key,get_api_token
+from yucl.utils import get_api_key,get_api_token
 
 
 base_url = "http://127.0.0.1:8000/v1/"

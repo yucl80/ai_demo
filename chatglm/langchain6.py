@@ -1,6 +1,6 @@
 from langchain.chains import LLMSummarizationCheckerChain
 from langchain_openai import ChatOpenAI
-from code.deploy.yucl_utils.jwt_token import get_api_key
+from yucl.utils import get_api_key
 from ChatGLM4 import ChatZhipuAI
 import os
 #llm = OpenAI(temperature=0)

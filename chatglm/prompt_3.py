@@ -3,7 +3,7 @@ from langchain.agents import AgentExecutor, tool
 from langchain.agents.output_parsers import XMLAgentOutputParser
 from langchain_community.chat_models import ChatAnthropic
 from langchain_openai import ChatOpenAI
-from code.deploy.yucl_utils.jwt_token import get_api_key,get_api_token
+from yucl.utils import get_api_key,get_api_token
 
 model = ChatOpenAI(
         model_name="glm-3-turbo",
