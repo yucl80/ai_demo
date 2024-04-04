@@ -52,8 +52,8 @@ from langchain.agents import create_structured_chat_agent
 from yucl.utils import get_api_key,get_api_token
 
 
-base_url = "http://127.0.0.1:8000/v1/"
-#base_url = "https://open.bigmodel.cn/api/paas/v4/"
+#base_url = "http://127.0.0.1:8000/v1/"
+base_url = "https://open.bigmodel.cn/api/paas/v4/"
 
 llm = ChatOpenAI(api_key=get_api_token(), base_url=base_url,model="glm-4")
 

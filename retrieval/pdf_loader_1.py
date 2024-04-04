@@ -1,26 +1,40 @@
 from langchain_community.document_loaders import PyPDFLoader
-from typing import List, Optional
-from openai import OpenAI
+from langchain_community.vectorstores import FAISS
 from langchain_core.embeddings import Embeddings
 from langchain_core.pydantic_v1 import BaseModel, Extra, Field, SecretStr
-loader = PyPDFLoader("/home/test/src/langchain/docs/docs/integrations/document_loaders/example_data/layout-parser-paper.pdf")
-pages = loader.load_and_split()
-from yucl_utils import HttpEmbeddingsClient
-from yucl_utils import log_output
+from yucl.utils import HttpEmbeddingsClient
+from yucl.utils import log_output
 #print(pages[0])
 
-from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings.huggingface import HuggingFaceBgeEmbeddings
-#from langchain_openai import OpenAIEmbeddings
 
-log_output("asasfdasdfsf")
+# loader = PyPDFLoader("/home/test/src/code/retrieval/pdf/创业板 ETF 期权合约基本条款.pdf")
+# pages = loader.load_and_split()
     
 embeddings = HttpEmbeddingsClient()
-results = embeddings.embed_documents(["How will the community be engaged?"])
+
+# faiss_index = FAISS.from_documents(pages,embeddings)
+# docs = faiss_index.similarity_search("交割方式是什么?", k=2)
+# for doc in docs:
+#    print(str(doc.metadata["page"]) + ":", doc.page_content[:300])
+
+# loader = PyPDFLoader("https://arxiv.org/pdf/2103.15348.pdf", extract_images=True)
+# pages = loader.load()
+# print(pages[4].page_content)
 
 
-#faiss_index = FAISS.from_documents(pages,embeddings)
-#docs = faiss_index.similarity_search("How will the community be engaged?", k=2)
-#for doc in docs:
-#   print(str(doc.metadata["page"]) + ":", doc.page_content[:300])
-    
+
+# from langchain_community.document_loaders import UnstructuredPDFLoader
+# loader = UnstructuredPDFLoader("/home/test/src/code/retrieval/pdf/创业板 ETF 期权合约基本条款.pdf")
+# data = loader.load()
+# print(data)
+from langchain_community.document_loaders import PyMuPDFLoader
+from langchain_community.document_loaders import PDFMinerLoader
+def test_pdf_loader():
+    loader = PyMuPDFLoader("/home/test/src/code/retrieval/pdf/创业板 ETF 期权合约基本条款.pdf")
+    data = loader.load()
+    print(data)
+
+from langchain_community.document_loaders import PyPDFDirectoryLoader
+loader = PyPDFDirectoryLoader("/home/test/src/code/retrieval/pdf/")
+docs = loader.load()
+print(docs[0])

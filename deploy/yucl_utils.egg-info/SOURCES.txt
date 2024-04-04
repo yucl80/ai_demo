@@ -2,6 +2,7 @@ setup.py
 yucl/__init__.py
 yucl/utils/HttpEmbeddingsClient.py
 yucl/utils/__init__.py
+yucl/utils/func_alias.py
 yucl/utils/hub_helper.py
 yucl/utils/llm_builder.py
 yucl/utils/log_pip.py
