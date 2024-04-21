@@ -2,7 +2,6 @@
 import time
 from typing import Any, List, Optional, Sequence, Tuple, Union
 
-from ChatGLM4 import ChatZhipuAI
 from langchain_core._api import deprecated
 from langchain_core.agents import AgentAction
 from langchain_core.callbacks import BaseCallbackManager

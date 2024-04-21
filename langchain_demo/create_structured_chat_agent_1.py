@@ -2,7 +2,6 @@
 from langchain.agents import AgentExecutor
 import time
 
-from ChatGLM4 import ChatZhipuAI
 from langchain_core.tools import tool
 from langchain_experimental.tools import PythonREPLTool
 
