@@ -68,8 +68,7 @@ agent = (
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 rep1 = agent_executor.invoke({"input": "How many letters in the word eudca"})
-register_tool(tools)
-dispatch_tool(rep1)
+
 
 #rep1 = list(agent_executor.stream({"input": "How many letters in the word eudca"}))
 print(rep1)
