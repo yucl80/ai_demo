@@ -16,6 +16,7 @@ embeddings_1 = model.encode(sentences_1,
 st = time.perf_counter()
 
 embeddings_2 = model.encode(sentences_2)['dense_vecs']
+print(embeddings_2)
 et = time.perf_counter() - st
 print("emb time ：", et)
 #similarity = embeddings_1 @ embeddings_2.T

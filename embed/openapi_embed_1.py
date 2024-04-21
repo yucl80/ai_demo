@@ -4,10 +4,10 @@ import os
 os.environ["OPENAI_API_KEY"]="NOKEY" 
 client = OpenAI(base_url="http://127.0.0.1:8000/v1/")
 
-emb = client.embeddings.create(input=["hello"],model="text-embedding-3-large",encoding_format="float")
+emb = client.embeddings.create(input=["hello"],model="bge-large-zh-v1.5",encoding_format="float")
 print(len(emb.data[0].embedding))
 
-def get_embedding(text, model="text-embedding-3-small"):
+def get_embedding(text, model="bge-large-zh-v1.5"):
     text = text.replace("\n", " ")
     return client.embeddings.create(input=[text], model=model).data[0].embedding
 
@@ -22,7 +22,7 @@ for str in corpus:
     response = get_embedding(str)
     corpus_embeddings.append(torch.tensor(response))
    
-query_embedding = get_embedding("I love you") 
+query_embedding = get_embedding("我爱你") 
 
 hits = semantic_search(torch.tensor(query_embedding), corpus_embeddings, top_k=5)
 hits = hits[0]      #Get the hits for the first query

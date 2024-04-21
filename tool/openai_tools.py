@@ -18,4 +18,17 @@ agent = create_openai_tools_agent(llm, tools, prompt)
 # Create an agent executor by passing in the agent and tools
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
-agent_executor.invoke({"input": "what is LangChain?"})
+result = agent_executor.invoke({"input": "what is LangChain?"})
+print(result)
+
+from langchain_core.messages import AIMessage, HumanMessage
+
+agent_executor.invoke(
+    {
+        "input": "what's my name? Don't use tools to look this up unless you NEED to",
+        "chat_history": [
+            HumanMessage(content="hi! my name is bob"),
+            AIMessage(content="Hello Bob! How can I assist you today?"),
+        ],
+    }
+)

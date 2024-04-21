@@ -33,4 +33,5 @@ llm = LlamaCpp(
 llm_chain = LLMChain(prompt=prompt, llm=llm)
 
 question = "What NFL team won the Super Bowl in the year Justin Bieber was born?"
-llm_chain.invoke(question)
+response = llm_chain.invoke(question)
+print(response)

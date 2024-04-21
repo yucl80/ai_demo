@@ -27,10 +27,10 @@ def get_api_token():
 def get_api_key():
     return os.environ["ZHIPUAI_API_KEY"]
 
-def create_llm(model_name="glm-3-turbo",temperature=0.01, timeout=180, max_retries=0,streaming=False):
+def create_llm(model="glm-3-turbo",temperature=0.01, timeout=180, max_retries=0,streaming=False):
     """create a language model using the OpenAI API."""
     return ChatOpenAI(
-        model_name=model_name,
+        model_name=model,
         openai_api_base="http://127.0.0.1:8000/v1/",
         openai_api_key= "EMPTY_KEY",
         streaming= streaming,

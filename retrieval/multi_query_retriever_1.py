@@ -36,9 +36,11 @@ import logging
 logging.basicConfig()
 logging.getLogger("langchain.retrievers.multi_query").setLevel(logging.INFO)
 
-# unique_docs = retriever_from_llm.get_relevant_documents(query=question)
+unique_docs = retriever_from_llm.get_relevant_documents(query=question)
 # len(unique_docs)
-# print(unique_docs)
+from pprint import pprint
+import json
+pprint(unique_docs)
 
 from typing import List
 

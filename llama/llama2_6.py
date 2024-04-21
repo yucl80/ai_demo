@@ -24,7 +24,8 @@ llm = HuggingFaceTextGenInference(
     top_k=50,
     temperature=0.1,
     repetition_penalty=1.03,
-    timeout=120
+    timeout=120,
+    model="llama-2-7b",
 )
 
 model = Llama2Chat(llm=llm)

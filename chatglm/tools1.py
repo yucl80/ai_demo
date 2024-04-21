@@ -52,8 +52,8 @@ from langchain.agents import create_structured_chat_agent
 from yucl.utils import get_api_key,get_api_token
 
 
-#base_url = "http://127.0.0.1:8000/v1/"
-base_url = "https://open.bigmodel.cn/api/paas/v4/"
+base_url = "http://127.0.0.1:8000/v1/"
+#base_url = "https://open.bigmodel.cn/api/paas/v4/"
 
 llm = ChatOpenAI(api_key=get_api_token(), base_url=base_url,model="glm-4")
 
@@ -66,7 +66,7 @@ agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=T
 
 rep = agent_executor.invoke(
     {
-        "input": "12加13等于多少？"
+        "input": "12 add 13 equals?"
     }
 )
 

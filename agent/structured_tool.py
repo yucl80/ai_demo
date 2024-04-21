@@ -19,7 +19,7 @@ from langchain_openai import ChatOpenAI
 # If you want to see the prompt in full, you can at: https://smith.langchain.com/hub/hwchase17/openai-functions-agent
 prompt = hub.pull("hwchase17/openai-functions-agent")
 
-llm =  ChatOpenAI(temperature=0, base_url = "http://127.0.0.1:8000/v1/",api_key="APIKEY")
+llm = ChatOpenAI(temperature=0, base_url="http://127.0.0.1:8000/v1/", api_key="APIKEY")
 
 agent = create_openai_functions_agent(llm, tools, prompt)
 agent_executor = AgentExecutor(agent=agent, tools=tools)

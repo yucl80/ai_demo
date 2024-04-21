@@ -1,53 +1,50 @@
-"""
-This script is an example of using the OpenAI API to create various interactions with a ChatGLM3 model.
-It includes functions to:
-
-1. Conduct a basic chat session, asking about weather conditions in multiple cities.
-2. Initiate a simple chat in Chinese, asking the model to tell a short story.
-3. Retrieve and print embeddings for a given text input.
-
-Each function demonstrates a different aspect of the API's capabilities, showcasing how to make requests
-and handle responses.
-"""
-
 from openai import OpenAI
-
-
+import time
 
 base_url = "http://127.0.0.1:8000/v1/"
-#base_url = "https://open.bigmodel.cn/api/paas/v1/"
+# base_url = "https://open.bigmodel.cn/api/paas/v1/"
 client = OpenAI(api_key="APIKEY", base_url=base_url)
+
+model_id = "qwen"
 
 
 def function_chat():
-    messages = [{"role": "user", "content": "What's the weather like in San Francisco, Tokyo, and Paris?"}]
+    messages = [
+        {
+            "role": "user",
+            "content": "中国平安的股票价格是多少?",
+        }
+    ]
     tools = [
         {
             "type": "function",
             "function": {
-                "name": "get_current_weather",
-                "description": "Get the current weather in a given location",
+                "name": "get_stock_price",
+                "description": "获取股票的当前价格",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "location": {
+                        "stock_symbol": {
                             "type": "string",
-                            "description": "The city and state, e.g. San Francisco, CA",
-                        },
-                        "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+                            "description": "股票代码"
+                        }
                     },
-                    "required": ["location"],
+                    "required": [
+                        "stock_symbol"
+                    ]
+
                 },
             },
         }
     ]
 
     response = client.chat.completions.create(
-        model="chatglm3-6b",
+        model=model_id,
         messages=messages,
         tools=tools,
         tool_choice="auto",
     )
+    print(response)
     if response:
         content = response.choices[0].message.content
         print(content)
@@ -60,25 +57,26 @@ def simple_chat(use_stream=False):
         {
             "role": "system",
             "content": "You are ChatGLM3, a large language model trained by Zhipu.AI. Follow the user's "
-                       "instructions carefully. Respond using markdown.",
+            "instructions carefully. Respond using markdown.",
         },
         {
             "role": "user",
-            "content": "你好，请你用生动的话语给我讲一个小故事吧"
-        }
+            "content": "你好，请你用生动的话语给我讲一个小故事吧, 故事要不少于300字",
+        },
     ]
     response = client.chat.completions.create(
-        model="chatglm3-6b",
+        model=model_id,
         messages=messages,
         stream=use_stream,
         max_tokens=1024,
         temperature=0.8,
         presence_penalty=1.1,
-        top_p=0.8)
+        top_p=0.8,
+    )
     if response:
         if use_stream:
             for chunk in response:
-                print(chunk.choices[0].delta.content)
+                print(chunk.choices[0].delta.content, end="")
         else:
             content = response.choices[0].message.content
             print(content)
@@ -88,7 +86,7 @@ def simple_chat(use_stream=False):
 
 def embedding():
     response = client.embeddings.create(
-        model="bge-large-zh-1.5",
+        model="bge-large-zh-v1.5",
         input=["你好，给我讲一个故事，大概100字"],
     )
     embeddings = response.data[0].embedding
@@ -96,7 +94,11 @@ def embedding():
 
 
 if __name__ == "__main__":
-    #simple_chat(use_stream=False)
     #simple_chat(use_stream=True)
-    embedding()
-    #function_chat()
+    #    simple_chat(use_stream=True)
+
+    begin_time = time.time()
+    # embedding()
+    function_chat()
+    end_time = time.time()
+    print("总耗时：", end_time - begin_time)

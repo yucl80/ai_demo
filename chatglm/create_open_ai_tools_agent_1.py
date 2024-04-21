@@ -19,7 +19,7 @@ from langchain.agents.format_scratchpad.openai_tools import \
     format_to_openai_tool_messages
 from langchain.agents.output_parsers.openai_tools import \
     OpenAIToolsAgentOutputParser
-from yucl.utils import create_llm
+from yucl.utils import ChatOpenAI
 
 @tool
 def multiply(first_int: int, second_int: int) -> int:
@@ -75,7 +75,7 @@ tools = [ get_word_length,  multiply, add, exponentiate]
 #tools = [ ]
 
 
-llm = create_llm()
+llm = ChatOpenAI(model="firefunction")
 
 
 llm_with_tools = llm.bind_tools(tools)

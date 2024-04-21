@@ -48,7 +48,7 @@ rep = chain.invoke({"input": "2022年11月4日，计算机系通过线上线下�
 
 print(rep)
 
-rep = chain.invoke({"input": "请解读这篇文章： https://arxiv.org/abs/2303.17568"})
+#rep = chain.invoke({"input": "请解读这篇文章： https://arxiv.org/abs/2303.17568"})
 
 
-print(rep)
+#print(rep)

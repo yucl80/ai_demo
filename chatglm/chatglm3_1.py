@@ -1,7 +1,8 @@
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
-from langchain.schema.messages import AIMessage,SystemMessage
+from langchain.schema.messages import AIMessage, SystemMessage
 from langchain_community.llms.chatglm3 import ChatGLM3
+
 template = """{question}"""
 prompt = PromptTemplate.from_template(template)
 endpoint_url = "http://127.0.0.1:8000/v1/chat/completions"
@@ -16,7 +17,7 @@ llm = ChatGLM3(
     max_tokens=80000,
     prefix_messages=messages,
     top_p=0.9,
-    timeout= 60,
+    timeout=120,
 )
 llm_chain = LLMChain(prompt=prompt, llm=llm)
 question = "北京和上海两座城市有什么不同？"

@@ -1,9 +1,11 @@
 from langchain.agents import tool
 from langchain_openai import ChatOpenAI
 
+
 @tool
 def get_word_length(word: str) -> int:
     """Returns the length of a word."""
+    print(f"Getting length of word: {word}")
     return len(word)
 
 tools = [get_word_length]
@@ -23,6 +25,7 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 llm = ChatOpenAI(temperature=0, base_url = "http://127.0.0.1:8000/v1/",api_key="APIKEY")
+
 llm_with_tools = llm.bind_tools(tools)
 
 from langchain.agents.format_scratchpad.openai_tools import (

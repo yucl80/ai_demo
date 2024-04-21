@@ -1,11 +1,23 @@
+from rank_bm25 import BM25Okapi
+
 from FlagEmbedding import FlagReranker
-reranker = FlagReranker('BAAI/bge-reranker-large', use_fp16=True) # Setting use_fp16 to True speeds up computation with a slight performance degradation
+# Setting use_fp16 to True speeds up computation with a slight performance degradation
+reranker = FlagReranker('BAAI/bge-reranker-v2-m3', use_fp16=False)
 
-score = reranker.compute_score(['query', 'passage'])
-print(score)
+# score = reranker.compute_score(['query', 'passage'])
+# print(score)
 
-scores = reranker.compute_score([['what is panda?', 'hi'], ['what is panda?', 'The giant panda (Ailuropoda melanoleuca), sometimes called a panda bear or simply panda, is a bear species endemic to China.']])
+
+scores = reranker.compute_score([['I love you', '我爱你'], ['I love you', 'i like you'], [
+                                'I love you', '我喜欢你'], ['I love you', 'i hate you'], ['I love you', '我不爱你'], ['I love you', 'I don\'t like you']])
 print(scores)
 
-scores = reranker.compute_score([['我喜欢你', 'hi'], ['我喜欢你', 'i like you'], ['我喜欢你', 'i love you'], ['我喜欢你', 'i hate you']])
-print(scores)
+
+corpus = [
+    '我爱你', 'I like you', '我喜欢你', 'I hate you', '我不爱你', 'I don\'t like you'
+]
+
+bm25 = BM25Okapi(corpus)
+query = "I love you"
+r = bm25.get_top_n(query, corpus, n=6)
+print(r)
