@@ -1,5 +1,5 @@
 from langchain_core.pydantic_v1 import BaseModel, Field
-from yucl_utils import ChatOpenAI
+from langchain_openai import ChatOpenAI
 
 # Note that the docstrings here are crucial, as they will be passed along
 # to the model along with the class name.
@@ -10,7 +10,7 @@ class Multiply(BaseModel):
     b: int = Field(..., description="Second integer")
 
 
-llm = ChatOpenAI() 
+llm = ChatOpenAI(model="llama-3-8b",base_url="http://localhost:8000/v1", api_key="YOUR_API_KEY") 
 
 llm_with_tools = llm.bind_tools([Multiply])
 

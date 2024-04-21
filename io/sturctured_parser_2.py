@@ -34,9 +34,9 @@ prompt = PromptTemplate(
     partial_variables={"format_instructions": format_instructions},
 )
 
-model = ChatOpenAI(base_url="http://localhost:8000/v1", openai_api_key="your_api_key",temperature=0)
+model = ChatOpenAI(model="mistral-7b" ,base_url="http://localhost:8000/v1", openai_api_key="your_api_key",temperature=0)
 chain = prompt | model | print_output | output_parser
 
-result = chain.invoke({"question": "证券行业包含哪些业务域? 请遵循MECE原则。不重复不遗漏的列出所有业务域。"})
+result = chain.invoke({"question": "证券行业包含哪些业务域? 请遵循MECE原则。不重复不遗漏的列出所有业务域。Reply using JSON format"})
 
 print(pprint.pformat(result))
