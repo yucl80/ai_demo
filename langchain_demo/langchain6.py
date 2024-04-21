@@ -1,17 +1,16 @@
 from langchain.chains import LLMSummarizationCheckerChain
 from langchain_openai import ChatOpenAI
 from yucl.utils import get_api_key
-from ChatGLM4 import ChatZhipuAI
+
 import os
 #llm = OpenAI(temperature=0)
 
-
-llm = ChatZhipuAI(
+llm = ChatOpenAI(
 #   endpoint_url="https://open.bigmodel.cn/api/paas/v4",
    endpoint_url="http://127.0.0.1:8000/v1",
    temperature=0.1,
    api_key=get_api_key(),
-   model_name="glm-4",
+   model_name="llama-3-8b",
 )
 os.environ["OPENAI_API_KEY"] = "NOKEY";
 llm = ChatOpenAI(temperature=0,base_url="http://127.0.0.1:8000/v1/",api_key="NOKEY")

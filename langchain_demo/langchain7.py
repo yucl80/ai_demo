@@ -3,10 +3,10 @@ from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain.schema.messages import AIMessage
 from yucl.utils import get_api_key
-from ChatGLM4 import ChatZhipuAI
+
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-
+from langchain_openai import ChatOpenAI
 
 template = """{question}"""
 prompt = PromptTemplate.from_template(template)
@@ -14,7 +14,7 @@ prompt = PromptTemplate.from_template(template)
 endpoint_url = "https://open.bigmodel.cn/api/paas/v4"
 
 
-llm = ChatZhipuAI(
+llm = ChatOpenAI(
    endpoint_url=endpoint_url,
    temperature=0.1,
    api_key=get_api_key(),

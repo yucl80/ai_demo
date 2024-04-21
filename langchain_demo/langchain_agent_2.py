@@ -14,7 +14,7 @@ from langchain.prompts import MessagesPlaceholder
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain.agents import tool
 from langchain_experimental.tools import PythonREPLTool
-from tool_register import dispatch_tool,register_tool
+
 
 def get_glm(temprature):
     llm = ChatOpenAI(
