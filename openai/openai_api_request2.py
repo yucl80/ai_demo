@@ -5,7 +5,7 @@ base_url = "http://127.0.0.1:8000/v1/"
 # base_url = "https://open.bigmodel.cn/api/paas/v1/"
 client = OpenAI(api_key="APIKEY", base_url=base_url)
 
-model_id = "qwen"
+model_id = "gemma"
 
 
 def function_chat():
@@ -61,7 +61,7 @@ def simple_chat(use_stream=False):
         },
         {
             "role": "user",
-            "content": "你好，请你用生动的话语给我讲一个小故事吧, 故事要不少于300字",
+            "content": "你好，请你用生动的话语给我讲一个小故事吧, 故事要不少于50字",
         },
     ]
     response = client.chat.completions.create(
@@ -94,11 +94,12 @@ def embedding():
 
 
 if __name__ == "__main__":
-    #simple_chat(use_stream=True)
+
     #    simple_chat(use_stream=True)
 
     begin_time = time.time()
+    simple_chat(use_stream=False)
     # embedding()
-    function_chat()
+    # function_chat()
     end_time = time.time()
     print("总耗时：", end_time - begin_time)

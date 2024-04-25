@@ -12,6 +12,8 @@ class HttpEmbeddingsClient(BaseModel, Embeddings):
     
     client : Any
     
+    model: str = "bge-large-zh-1.5"
+    
     def __init__(self, **kwargs: Any):
         """Initialize the sentence_transformer."""
         super().__init__(**kwargs)
@@ -32,7 +34,7 @@ class HttpEmbeddingsClient(BaseModel, Embeddings):
      
         resutls = []
         response = self.client.embeddings.create(
-        model="bge-large-zh-1.5",
+        model=self.model,
         input=texts,
         )
         for data in response.data:            

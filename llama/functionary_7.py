@@ -1,5 +1,7 @@
 from openai import OpenAI
 import json
+import time
+before = time.time()
 
 client = OpenAI(base_url="http://localhost:8000/v1", api_key="functionary")
 
@@ -58,3 +60,5 @@ chat_completion = client.chat.completions.create(
 
 
 print(chat_completion.choices[0].message.model_dump_json(indent=4))
+end = time.time()
+print(f"Time taken: {end - before} seconds")

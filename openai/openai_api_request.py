@@ -12,16 +12,18 @@ and handle responses.
 from yucl.utils import get_api_token
 from openai import OpenAI
 import os
+import time
 
 base_url = "http://127.0.0.1:8000/v1/"
-#base_url = "https://open.bigmodel.cn/api/paas/v4/"
+# base_url = "https://open.bigmodel.cn/api/paas/v4/"
 os.environ["OPENAI_API_KEY"] = get_api_token()
 
-client = OpenAI( base_url=base_url)
+client = OpenAI(base_url=base_url)
 
 
 def function_chat():
-    messages = [{"role": "user", "content": "What's the weather like in San Francisco, Tokyo, and Paris?"}]
+    messages = [
+        {"role": "user", "content": "What's the weather like in San Francisco, Tokyo, and Paris?"}]
     tools = [
         {
             "type": "function",
@@ -44,21 +46,22 @@ def function_chat():
     ]
 
     response = client.chat.completions.create(
-        model="glm-3-turbo",
+        model="chatglm",
         messages=messages,
         tools=tools,
         tool_choice="auto",
+        stream=False
     )
     if response:
         print(response)
-        #content = response.choices[0].message.content
-        #print(content)
+        # content = response.choices[0].message.content
+        # print(content)
     else:
         print("Error:", response.status_code)
 
 
-
-
-
-if __name__ == "__main__":   
+if __name__ == "__main__":
+    begintime = time.time()
     function_chat()
+    endtime = time.time()
+    print("Time used:", endtime - begintime)

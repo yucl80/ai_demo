@@ -1,9 +1,9 @@
 from langchain.globals import set_llm_cache
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 import time
 
 # To make the caching really obvious, lets use a slower model.
-llm = OpenAI(model="gpt-3.5-turbo-instruct",  api_key="your_api_key" ,base_url="http://localhost:8000/v1/chat")
+llm = ChatOpenAI(model="functionary",  api_key="your_api_key" ,base_url="http://localhost:8000/v1")
 
 from langchain.cache import InMemoryCache
 
@@ -11,15 +11,15 @@ set_llm_cache(InMemoryCache())
 
 begin = time.time()
 # The first time, it is not yet in cache, so it should take longer
-llm("Tell me a joke")
+response = llm.invoke("请给我讲个笑话")
 end = time.time()
 print(f"First time: {end - begin:.2f}s")
-
+print(response)
 begin = time.time()
 # The second time, it should be faster since it is in cache
-llm("Tell me a joke")
+response = llm.invoke("请给我讲个笑话")
 end = time.time()
 print(f"Second time: {end - begin:.2f}s")
-
+print(response)
 
 
