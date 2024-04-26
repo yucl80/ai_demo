@@ -455,6 +455,7 @@ async def create_chat_completion(
         "logit_bias_type",
         "user",
     }
+    print(body)
     kwargs = body.model_dump(exclude=exclude)
     llama = llama_proxy(body.model)
     if body.logit_bias is not None:
@@ -473,14 +474,14 @@ async def create_chat_completion(
         num_threads = chatglm_settings.n_threads
         chatglm_pipeline = llama
         if body.stream:
-            msg_iterator = chatglm.stream_chat(
-                chatglm_pipeline, body,  max_context_length, num_threads)
-            first_response = await run_in_threadpool(next, msg_iterator)
-            # If no exception was raised from first_response, we can assume that
-            # the iterator is valid and we can use it to stream the response.
-            def iterator() -> Iterator[llama_cpp.ChatCompletionChunk]:
-                yield first_response
-                yield from msg_iterator
+            iterator = chatglm.stream_chat( chatglm_pipeline, body,  max_context_length, num_threads)
+            # first_response = await run_in_threadpool(next, msg_iterator)
+            # # If no exception was raised from first_response, we can assume that
+            # # the iterator is valid and we can use it to stream the response.
+
+            # def iterator() -> Iterator[llama_cpp.ChatCompletionChunk]:
+            #     yield first_response
+            #     yield from msg_iterator
             send_chan, recv_chan = anyio.create_memory_object_stream(10)
             return EventSourceResponse(
                 recv_chan,
@@ -488,7 +489,7 @@ async def create_chat_completion(
                     get_event_publisher,
                     request=request,
                     inner_send_chan=send_chan,
-                    iterator=iterator(),
+                    iterator= iterator,
                 ),
                 sep="\n",
                 ping_message_factory=_ping_message_factory,

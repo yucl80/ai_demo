@@ -46,7 +46,7 @@ def function_chat():
     ]
 
     response = client.chat.completions.create(
-        model="chatglm",
+        model="functionary",
         messages=messages,
         tools=tools,
         tool_choice="auto",
