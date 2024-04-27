@@ -12,6 +12,7 @@ import chatglm_cpp
 import chatglm
 import gc
 
+
 class LlamaProxy:
     def __init__(self, models: List[ModelSettings]) -> None:
         assert len(models) > 0, "No models provided!"
@@ -68,9 +69,6 @@ class LlamaProxy:
         if self._current_model:
             del self._current_model
             gc.collect()
-            
-            
-             
 
     @staticmethod
     def load_llama_from_model_settings(settings: ModelSettings) -> llama_cpp.Llama:
@@ -136,17 +134,18 @@ class LlamaProxy:
                 repo_id=settings.hf_model_repo_id,
                 filename=settings.model,
             )
-        elif settings.chat_format =="chatglm":
-           create_fn = chatglm_cpp.Pipeline
-           kwargs["model_path"] = settings.model     
+        elif settings.chat_format == "chatglm":
+            create_fn = chatglm_cpp.Pipeline
+            kwargs["model_path"] = settings.model
         else:
             create_fn = llama_cpp.Llama
-            kwargs["model_path"] = settings.model            
-       
-        if settings.chat_format =="chatglm":
+            kwargs["model_path"] = settings.model
+
+        if settings.chat_format == "chatglm3":
             _model = chatglm_cpp.Pipeline(settings.model)
-            _model.create_chat_completion= chatglm.create_chat_completion
-        else:    
+            _model.create_chat_completion = chatglm.create_chat_completion
+
+        else:
             _model = create_fn(
                 **kwargs,
                 # Model Params
@@ -198,11 +197,15 @@ class LlamaProxy:
             if settings.cache:
                 if settings.cache_type == "disk":
                     if settings.verbose:
-                        print(f"Using disk cache with size {settings.cache_size}")
-                    cache = llama_cpp.LlamaDiskCache(capacity_bytes=settings.cache_size)
+                        print(
+                            f"Using disk cache with size {settings.cache_size}")
+                    cache = llama_cpp.LlamaDiskCache(
+                        capacity_bytes=settings.cache_size)
                 else:
                     if settings.verbose:
-                        print(f"Using ram cache with size {settings.cache_size}")
-                    cache = llama_cpp.LlamaRAMCache(capacity_bytes=settings.cache_size)
+                        print(
+                            f"Using ram cache with size {settings.cache_size}")
+                    cache = llama_cpp.LlamaRAMCache(
+                        capacity_bytes=settings.cache_size)
                 _model.set_cache(cache)
         return _model

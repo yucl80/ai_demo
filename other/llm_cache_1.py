@@ -3,7 +3,7 @@ from langchain_openai import ChatOpenAI
 import time
 
 # To make the caching really obvious, lets use a slower model.
-llm = ChatOpenAI(model="functionary",  api_key="your_api_key" ,base_url="http://localhost:8000/v1")
+llm = ChatOpenAI(model="firefunction",  api_key="your_api_key" ,base_url="http://localhost:8000/v1")
 
 from langchain.cache import InMemoryCache
 

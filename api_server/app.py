@@ -468,13 +468,14 @@ async def create_chat_completion(
     if body.grammar is not None:
         kwargs["grammar"] = llama_cpp.LlamaGrammar.from_string(body.grammar)
 
-    if body.model == "chatglm":
-        chatglm_settings = _llama_proxy._model_settings_dict["chatglm"]
+    if body.model == "chatglm3":
+        chatglm_settings = _llama_proxy._model_settings_dict["chatglm3"]
         max_context_length = chatglm_settings.n_ctx
         num_threads = chatglm_settings.n_threads
         chatglm_pipeline = llama
         if body.stream:
-            iterator = chatglm.stream_chat( chatglm_pipeline, body,  max_context_length, num_threads)
+            iterator = chatglm.stream_chat(
+                chatglm_pipeline, body,  max_context_length, num_threads)
             # first_response = await run_in_threadpool(next, msg_iterator)
             # # If no exception was raised from first_response, we can assume that
             # # the iterator is valid and we can use it to stream the response.
@@ -489,13 +490,14 @@ async def create_chat_completion(
                     get_event_publisher,
                     request=request,
                     inner_send_chan=send_chan,
-                    iterator= iterator,
+                    iterator=iterator,
                 ),
                 sep="\n",
                 ping_message_factory=_ping_message_factory,
             )
         else:
             return await chatglm.create_chat_completion(chatglm_pipeline,  body, max_context_length, num_threads)
+
     else:
         iterator_or_completion: Union[
             llama_cpp.ChatCompletion, Iterator[llama_cpp.ChatCompletionChunk]

@@ -55,7 +55,7 @@ tools = [
 ]
 
 chat_completion = client.chat.completions.create(
-    model="firefunction-v1",
+    model="firefunction",
     messages=messages,
     tools=tools,
     temperature=0.1

@@ -23,7 +23,7 @@ client = OpenAI(base_url=base_url)
 
 def function_chat():
     messages = [
-        {"role": "user", "content": "What's the weather like in San Francisco, Tokyo, and Paris?"}]
+        {"role": "user", "content": "What's the weather like in San Francisco?"}]
     tools = [
         {
             "type": "function",
@@ -46,7 +46,7 @@ def function_chat():
     ]
 
     response = client.chat.completions.create(
-        model="functionary",
+        model="chatglm3",
         messages=messages,
         tools=tools,
         tool_choice="auto",
