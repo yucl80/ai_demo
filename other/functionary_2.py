@@ -6,7 +6,7 @@ base_url = "http://127.0.0.1:8000/v1/"
 
 client = OpenAI(base_url=base_url,api_key="NOKEY")
 
-model_id = "chatglm3"
+model_id = "functionary"
 
 response = client.chat.completions.create(
     model=model_id,

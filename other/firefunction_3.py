@@ -46,23 +46,12 @@ function_spec = [
 functions = json.dumps(function_spec, indent=4)
 
 messages = [
-
     {
         "role": "system",
         "content": "You are a helpful assistant with access to functions. Use them if required. ",
     },
-    {"role": "functions", "content": functions},
-    {"role": "user", "content": "Hi, can you tell me the current stock price of AAPL?"},
-]
-
-messages2 = [
-
-    {
-        "role": "system",
-        "content": "You are a helpful assistant with access to functions. Use them if required. ",
-    },
-    {"role": "functions", "content": functions},
-    {"role": "user", "content": "Hi, can you tell me the current stock price of GOOG?"},
+    # {"role": "system", "content": functions},
+    {"role": "user", "content": "Hi, can you tell me the current stock price of AAPL and GOOG?"},
 ]
 
 model_name = "firefunction"
@@ -73,46 +62,17 @@ model_name = "firefunction"
 
 # print(tokenizer.convert_ids_to_tokens(model_inputs[0]))
 
-# model_inputs = tokenizer.apply_chat_template(
-#     messages, return_tensors="pt").to(model.device)
-# generated_ids = model.generate(model_inputs, max_new_tokens=128)
-# decoded = tokenizer.batch_decode(generated_ids)
-# print(decoded[0])
-
 
 # We should use HF AutoTokenizer instead of llama.cpp's tokenizer because we found that Llama.cpp's tokenizer doesn't give the same result as that from Huggingface. The reason might be in the training, we added new tokens to the tokenizer and Llama.cpp doesn't handle this successfully
-llm = Llama.from_pretrained(
-    repo_id="neopolita/firefunction-v1-gguf",
-    filename="firefunction-v1_q2_k.gguf",
-    tokenizer=LlamaHFTokenizer.from_pretrained("fireworks-ai/firefunction-v1"),
-    n_gpu_layers=-1,
-)
-before = time.time()
-response = llm.create_chat_completion(
-    messages=messages,
-    # tools=function_spec,
-    tool_choice="auto",
 
-)
+
+before = time.time()
+client = OpenAI(api_key="wrTGJ0yeD9BTheuMyeLl6kqic2rG3GtoL3jkaAWH7dmX1JrI",
+                base_url="http://127.0.0.1:8000/v1/")
+response = client.chat.completions.create(model=model_name, messages=messages, tools=function_spec,
+                                          tool_choice="auto", temperature=0.1, response_format={"type": "json_object"})
 end = time.time()
 print(f"Time taken: {end - before} seconds")
-before = time.time()
-response = llm.create_chat_completion(
-    messages=messages2,
-    tools=function_spec,
-    tool_choice="auto",
-
-)
-
-end = time.time()
-print(f"Time taken: {end - before} seconds")
-
-
-# before = time.time()
-# client = OpenAI(api_key="wrTGJ0yeD9BTheuMyeLl6kqic2rG3GtoL3jkaAWH7dmX1JrI", base_url="http://127.0.0.1:8000/v1/")
-# response = client.chat.completions.create(model=model_name, messages=messages, tool_choice="auto",temperature=0.1,response_format={"type": "json_object"});
-# end = time.time()
-# print(f"Time taken: {end - before} seconds")
 
 
 print(response)

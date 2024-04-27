@@ -6,7 +6,7 @@ import json
 from threading import Lock
 from functools import partial
 from typing import Iterator, List, Optional, Union, Dict
-
+import uuid
 import llama_cpp
 import chatglm
 import anyio
@@ -497,6 +497,65 @@ async def create_chat_completion(
             )
         else:
             return await chatglm.create_chat_completion(chatglm_pipeline,  body, max_context_length, num_threads)
+
+    elif body.model == "firefunction":
+        messages = []
+        function_spec = json.dumps(body.tools)
+        messages.append({"role": "functions", "content": function_spec})
+        for message in body.messages:
+            messages.append(
+                {"role": message["role"], "content": message["content"]})
+        response = llama.create_chat_completion(
+            messages=messages,
+            tools=function_spec,
+            tool_choice="auto",
+            temperature=body.temperature,
+            top_p=body.top_p,
+            logprobs=body.logprobs,
+            max_tokens=body.max_tokens,
+        )
+        choices = []
+        for choice in response["choices"]:
+            message_content = choice['message']['content']
+            function_call_json = message_content[len('<functioncall>'):]
+            function_call_data = json.loads(function_call_json)
+            choices.append(
+                {
+                    "index": choice["index"],                    
+                    "logprobs": choice["logprobs"],
+                    "finish_reason": choice["finish_reason"],
+                    "message":{
+                        "content": message_content,
+                        "role":choice["message"]["role"],
+                      
+                        "tool_calls":[
+                            {
+                                "id": "tool_call_" + uuid.uuid4().hex,
+                                "type" : "function",
+                                "function":{
+                                    "name": function_call_data['name'],                  
+                                    "arguments": json.dumps(function_call_data['arguments'])
+                                }
+                            }
+                        ]
+                        
+                    }
+                }
+            )
+        result = {
+            "id": response["id"],
+            "object": response["object"],
+            "created": response["created"],
+            "model": body.model,
+            "choices": choices,
+            "usage": {
+                "prompt_tokens": response["usage"]["prompt_tokens"],
+                "completion_tokens": response["usage"]["completion_tokens"],
+                "total_tokens": response["usage"]["total_tokens"],
+            }
+
+        }      
+        return result
 
     else:
         iterator_or_completion: Union[

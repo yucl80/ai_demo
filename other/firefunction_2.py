@@ -48,8 +48,8 @@ function_spec = [
 functions = json.dumps(function_spec, indent=4)
 
 messages = [
-    {'role': 'functions', 'content': functions},
     {'role': 'system', 'content': 'You are a helpful assistant with access to functions. Use them if required.'},
+    {'role': 'functions', 'content': functions},    
     {'role': 'user', 'content': 'Hi, can you tell me the current stock price of AAPL?'}
 ]
 

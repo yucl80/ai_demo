@@ -6,8 +6,8 @@ from llama_cpp.llama_tokenizer import LlamaHFTokenizer
 llm = Llama.from_pretrained(
     # repo_id="brittlewis12/Octopus-v2-GGUF",
     # filename="octopus-v2.Q4_K_M.gguf",
-    repo_id="meetkai/functionary-small-v2.4-GGUF",
-    filename="functionary-small-v2.4.Q4_0.gguf",
+    repo_id="meetkai/functionary-medium-v2.2-GGUF",
+    filename="functionary-medium-v2.2.q4_0.gguf",
     #  chat_format="firefunction-v1",
     #   tokenizer=LlamaHFTokenizer.from_pretrained("brittlewis12/Octopus-v2-GGUF"),
     #  n_gpu_layers=-1
