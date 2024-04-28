@@ -70,37 +70,37 @@ def get_financial_data(metric: str, financial_year: int, company: str):
         raise NotImplementedError()
 
 
-# function_call = chat_completion.choices[0].message.tool_calls[0].function
-# tool_response = locals()[function_call.name](**json.loads(function_call.arguments))
-# print(tool_response)
+function_call = chat_completion.choices[0].message.tool_calls[0].function
+tool_response = locals()[function_call.name](**json.loads(function_call.arguments))
+print(tool_response)
 
-# agent_response = chat_completion.choices[0].message
+agent_response = chat_completion.choices[0].message
 
-# # Append the response from the agent
-# messages.append(
-#     {
-#         "role": agent_response.role, 
-#         "content": "",
-#         "tool_calls": [
-#             tool_call.model_dump()
-#             for tool_call in chat_completion.choices[0].message.tool_calls
-#         ]
-#     }
-# )
+# Append the response from the agent
+messages.append(
+    {
+        "role": agent_response.role, 
+        "content": "",
+        "tool_calls": [
+            tool_call.model_dump()
+            for tool_call in chat_completion.choices[0].message.tool_calls
+        ]
+    }
+)
 
-# # Append the response from the tool 
-# messages.append(
-#     {
-#         "role": "assistant",
-#         "content": json.dumps(tool_response)
-#     }
-# )
+# Append the response from the tool 
+messages.append(
+    {
+        "role": "assistant",
+        "content": json.dumps(tool_response)
+    }
+)
 
-# next_chat_completion = client.chat.completions.create(
-#     model="firefunction-v1",
-#     messages=messages,
-#     tools=tools,
-#     temperature=0.1
-# )
+next_chat_completion = client.chat.completions.create(
+    model="firefunction",
+    messages=messages,
+    tools=tools,
+    temperature=0.1
+)
 
-# print(next_chat_completion.choices[0].message.content)
+print(next_chat_completion)

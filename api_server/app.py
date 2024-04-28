@@ -517,31 +517,44 @@ async def create_chat_completion(
         choices = []
         for choice in response["choices"]:
             message_content = choice['message']['content']
-            function_call_json = message_content[len('<functioncall>'):]
-            function_call_data = json.loads(function_call_json)
-            choices.append(
-                {
-                    "index": choice["index"],                    
-                    "logprobs": choice["logprobs"],
-                    "finish_reason": choice["finish_reason"],
-                    "message":{
-                        "content": message_content,
-                        "role":choice["message"]["role"],
-                      
-                        "tool_calls":[
-                            {
-                                "id": "tool_call_" + uuid.uuid4().hex,
-                                "type" : "function",
-                                "function":{
-                                    "name": function_call_data['name'],                  
-                                    "arguments": json.dumps(function_call_data['arguments'])
+            if '<functioncall>' in message_content:
+                function_call_json = message_content[len('<functioncall>'):]
+                function_call_data = json.loads(function_call_json)
+                choices.append(
+                    {
+                        "index": choice["index"],
+                        "logprobs": choice["logprobs"],
+                        "finish_reason": choice["finish_reason"],
+                        "message": {
+                            "content": message_content,
+                            "role": choice["message"]["role"],
+                            "tool_calls": [
+                                {
+                                    "id": "tool_call_" + uuid.uuid4().hex,
+                                    "type": "function",
+                                    "function": {
+                                        "name": function_call_data['name'],
+                                        "arguments": json.dumps(function_call_data['arguments'])
+                                    }
                                 }
-                            }
-                        ]
-                        
+                            ]
+
+                        }
                     }
-                }
-            )
+                )
+            else:
+                choices.append(
+                    {
+                        "index": choice["index"],
+                        "logprobs": choice["logprobs"],
+                        "finish_reason": choice["finish_reason"],
+                        "message": {
+                            "content": message_content,
+                            "role": choice["message"]["role"]
+                        }
+                    }
+                )
+
         result = {
             "id": response["id"],
             "object": response["object"],
@@ -554,7 +567,7 @@ async def create_chat_completion(
                 "total_tokens": response["usage"]["total_tokens"],
             }
 
-        }      
+        }
         return result
 
     else:
