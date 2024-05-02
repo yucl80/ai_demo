@@ -5,7 +5,7 @@ base_url = "http://127.0.0.1:8000/v1/"
 # base_url = "https://open.bigmodel.cn/api/paas/v1/"
 client = OpenAI(api_key="APIKEY", base_url=base_url)
 
-model_id = "chatglm"
+model_id = "llama-3-8b"
 
 
 def function_chat():
@@ -24,15 +24,9 @@ def function_chat():
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "stock_symbol": {
-                            "type": "string",
-                            "description": "股票代码"
-                        }
+                        "stock_symbol": {"type": "string", "description": "股票代码"}
                     },
-                    "required": [
-                        "stock_symbol"
-                    ]
-
+                    "required": ["stock_symbol"],
                 },
             },
         }
@@ -61,7 +55,7 @@ def simple_chat(use_stream=False):
         },
         {
             "role": "user",
-            "content": "你好，请你用生动的话语给我讲一个小故事吧, 故事要不少于50字",
+            "content": "你好，给我讲一个故事，大概200字",
         },
     ]
     response = client.chat.completions.create(
@@ -87,7 +81,8 @@ def simple_chat(use_stream=False):
 def embedding():
     response = client.embeddings.create(
         model="bge-large-zh-v1.5",
-        input=["你好，给我讲一个故事，大概100字"],
+        # input=["你好，给我讲一个故事，大概100字"],
+        input=["talk about a story, about 200 words"],
     )
     embeddings = response.data[0].embedding
     print("嵌入完成，维度：", len(embeddings))
@@ -98,7 +93,7 @@ if __name__ == "__main__":
     #    simple_chat(use_stream=True)
 
     begin_time = time.time()
-    simple_chat(use_stream=True)
+    simple_chat(use_stream=False)
     # embedding()
     # function_chat()
     end_time = time.time()

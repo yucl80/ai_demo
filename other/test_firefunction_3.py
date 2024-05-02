@@ -56,7 +56,8 @@ chat_completion = client.chat.completions.create(
     messages=messages,
     tools=tools,
     tool_choice=tool_choice,
-    temperature=0.1
+    temperature=0.01,
+    response_format={ "type": "json_object" },
 )
 
 print(chat_completion.choices[0].message.model_dump_json(indent=4))

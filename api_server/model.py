@@ -146,7 +146,7 @@ class LlamaProxy:
             _model = chatglm_cpp.Pipeline(settings.model)
             _model.create_chat_completion = chatglm.create_chat_completion
 
-        elif settings.chat_format == "firefunction":
+        elif settings.chat_format == "firefunction" :           
             _model = Llama.from_pretrained(
                 # repo_id="neopolita/firefunction-v1-gguf",
                 # filename="firefunction-v1_q2_k.gguf",
@@ -167,7 +167,24 @@ class LlamaProxy:
                 n_threads=settings.n_threads,
                 n_threads_batch=settings.n_threads_batch,
             )
-
+        elif settings.chat_format == "openfunctions":          
+            _model = Llama(            
+                model_path=settings.model,
+                tokenizer=tokenizer,
+                n_gpu_layers=settings.n_gpu_layers,
+                main_gpu=settings.main_gpu,
+                tensor_split=settings.tensor_split,
+                vocab_only=settings.vocab_only,
+                use_mmap=settings.use_mmap,
+                use_mlock=settings.use_mlock,
+                kv_overrides=kv_overrides,
+                # Context Params
+                seed=settings.seed,
+                n_ctx=settings.n_ctx,
+                n_batch=settings.n_batch,
+                n_threads=settings.n_threads,
+                n_threads_batch=settings.n_threads_batch,
+            )
         else:
             _model = create_fn(
                 **kwargs,

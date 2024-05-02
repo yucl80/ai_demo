@@ -53,7 +53,7 @@ pythonREPLTool = PythonREPLTool()
 prompt = hub.pull("hwchase17/structured-chat-agent")
 #prompt.pretty_print()
 
-llm = create_llm( )    
+llm = create_llm(model="llama-3-8b" )    
    
 
 #定义工具

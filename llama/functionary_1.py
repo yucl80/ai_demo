@@ -74,7 +74,11 @@ tools = [  # For functionary-7b-v2 we use "tools"; for functionary-7b-v1.4 we us
     },
 ]
 
-
+result = llm.create_chat_completion(
+    messages=messages,
+    tools=tools,
+    tool_choice="auto",
+)
 start_time = time.time()
 result = llm.create_chat_completion(
     messages=messages,

@@ -9,6 +9,7 @@ It includes functions to:
 Each function demonstrates a different aspect of the API's capabilities, showcasing how to make requests
 and handle responses.
 """
+
 from yucl.utils import get_api_token
 from openai import OpenAI
 import os
@@ -23,7 +24,8 @@ client = OpenAI(base_url=base_url)
 
 def function_chat():
     messages = [
-        {"role": "user", "content": "What's the weather like in San Francisco?"}]
+        {"role": "user", "content": "What's the weather like in San Francisco?"}
+    ]
     tools = [
         {
             "type": "function",
@@ -46,11 +48,11 @@ def function_chat():
     ]
 
     response = client.chat.completions.create(
-        model="chatglm3",
+        model="firefunction",
         messages=messages,
         tools=tools,
         tool_choice="auto",
-        stream=False
+        stream=False,
     )
     if response:
         print(response)

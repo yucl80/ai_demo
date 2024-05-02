@@ -16,7 +16,14 @@ llm_with_tools = llm.bind_tools([Multiply])
 
 from langchain_core.output_parsers.openai_tools import JsonOutputToolsParser
 
-tool_chain = llm_with_tools | JsonOutputToolsParser()
+response = llm_with_tools.invoke("what's 3 * 12")
+print(response)
 
-rep = tool_chain.invoke("what's 3 * 12")
+tool_chain = llm_with_tools | JsonOutputToolsParser()
+import time
+begin = time.time()
+rep = tool_chain.invoke("what's 3 * 10")
+end = time.time() 
+
+print(f"Time taken: {end - begin} seconds")
 print(rep)

@@ -35,7 +35,7 @@ prompt = ChatPromptTemplate.from_messages(
 pythonREPLTool = PythonREPLTool()
 
 # prompt.pretty_print()
-llm = ChatOpenAI(model="mistral-7b")
+llm = ChatOpenAI(model="llama-3-8b")
 
 # 定义工具
 tools = [get_word_length,pythonREPLTool]

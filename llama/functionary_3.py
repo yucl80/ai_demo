@@ -4,7 +4,7 @@ import json
 
 client = OpenAI(base_url="http://localhost:8000/v1", api_key="functionary")
 
-model_id = "functionary"
+model_id = "llama-3-8b"
 
 start_time = time.time()
 
@@ -99,12 +99,14 @@ messages.append(
 
 # Append the response from the tool
 messages.append({"role": agent_response.role, "content": json.dumps(tool_response)})
-
+beg_time = time.time()
 next_chat_completion = client.chat.completions.create(
     model=model_id,
     messages=messages,
     tools=tools,
     temperature=0.01,
 )
+end_time = time.time()
+print("Time taken: ", end_time - beg_time)
 
 print(next_chat_completion.choices[0].message.content)

@@ -15,7 +15,7 @@ from langchain_core.messages import AIMessage, HumanMessage
 
 def get_glm(temprature):
     llm = ChatOpenAI(
-        model_name="glm-4",
+        model_name="chatglm3",
 #        openai_api_base="https://open.bigmodel.cn/api/paas/v4",
         openai_api_base="http://127.0.0.1:8000/v1/",
         openai_api_key=get_api_token(),

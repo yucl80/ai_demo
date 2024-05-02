@@ -37,7 +37,7 @@ pythonREPLTool = PythonREPLTool()
 prompt = pull_repo("hwchase17/structured-chat-agent")
 # prompt.pretty_print()
 
-llm = ChatOpenAI(model="mixtral-8x7b")
+llm = ChatOpenAI(model="chatglm3")
 
 
 # 定义工具
