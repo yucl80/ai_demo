@@ -105,7 +105,7 @@ def get_openfunctions_prompt(messages: list = [], functions: list = []) -> str:
     if len(functions) == 0:
         return f"{system}\n### Instruction: <<question>> {user_query}\n### Response: "
     functions_string = json.dumps(functions)
-    result = f"<｜begin▁of▁sentence｜>{system}\n### Instruction: <<function>>{functions_string}\n<<question>>{user_query}### Response: "
+    result = f"<｜begin▁of▁sentence｜>{system}\n### Instruction: <<function>>{functions_string}\n{user_query}### Response: "
 
     print(result)
     return result

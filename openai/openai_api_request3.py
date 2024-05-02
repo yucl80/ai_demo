@@ -21,14 +21,27 @@ os.environ["OPENAI_API_KEY"] = get_api_token()
 
 client = OpenAI(base_url=base_url)
 
+SYSTEM_PROMPT_FOR_CHAT_MODEL = """
+    You are an expert in composing functions. You are given a question and a set of possible functions. 
+    Based on the question, you will need to make one or more function/tool calls to achieve the purpose. 
+    If none of the function can be used, point it out. If the given question lacks the parameters required by the function,
+    also point it out. You should only return the function call in tool_calls sections.
+    """
+
+USER_PROMPT_FOR_CHAT_MODEL2 = """
+    Questions:{user_prompt}\nHere is a list of functions in JSON format that you can invoke:\n{functions}. 
+    Should you decide to return the function call(s),Put it in the format of tool_calls=[{{function:{{arguments:'{{params_name: params_value}}',name:function_name}}, type='function'}}]\n
+    NO other text MUST be included. 
+"""
+USER_PROMPT_FOR_CHAT_MODEL = """
+    Questions:{user_prompt}\nHere is a list of functions in JSON format that you can invoke:\n{functions}. 
+    Should you decide to return the function call(s),Put it in the format of [func1(params_name=params_value, params_name2=params_value2...), func2(params)]\n
+    NO other text MUST be included. 
+"""
+
 
 def function_chat():
-    messages = [
-        {
-            "role": "user",
-            "content": "What's the weather like in San Francisco and CA?",
-        },
-    ]
+
     tools = [
         {
             "type": "function",
@@ -50,10 +63,24 @@ def function_chat():
         }
     ]
 
+    messages = [
+        {
+            "role": "system",
+            "content": SYSTEM_PROMPT_FOR_CHAT_MODEL,
+        },
+        {
+            "role": "user",
+            "content": USER_PROMPT_FOR_CHAT_MODEL.format(
+                user_prompt="What's the weather like in San Francisco and WuHan?",
+                functions=tools,
+            ),
+        },
+    ]
+
     response = client.chat.completions.create(
         model="openfunctions",
         messages=messages,
-        tools=tools,
+        # tools=tools,
         tool_choice="auto",
         stream=False,
     )
