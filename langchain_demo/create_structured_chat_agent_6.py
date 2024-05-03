@@ -22,10 +22,10 @@ langchain.debug = True
 
 
 @tool
-def get_word_length(word: str) -> int:
-    """Returns the length of a word."""
-    print("call get_word_length")
-    return len(word)
+def get_current_weather(location: str,) -> str:
+    """Get the current weather in a given location."""
+    print("call get_current_weather")
+    return "The weather in {location} is sunny today."
 
 
 # print(multiply.name)
@@ -41,7 +41,7 @@ llm = ChatOpenAI(model="openfunctions")
 
 
 # 定义工具
-tools = [get_word_length]
+tools = [get_current_weather]
 
 
 # 创建 structured chat agent
@@ -59,7 +59,7 @@ agent_executor = AgentExecutor(
 
 # rep = agent_executor.invoke(  { "input": "Take 3 to the fifth power and multiply that by the sum of twelve and three, then square the whole result"   })
 st = time.perf_counter()
-rep = agent_executor.invoke({"input": "How many letters in the word eudca"})
+rep = agent_executor.invoke({"input": "What's the weather like in the two cities of Boston"})
 et = time.perf_counter() - st
 print("search time:", et)
 print(rep)

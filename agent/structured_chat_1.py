@@ -9,7 +9,7 @@ tools = [TavilySearchResults(max_results=1)]
 prompt = hub.pull("hwchase17/structured-chat-agent")
 
 # Choose the LLM that will drive the agent
-llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-1106")
+llm = ChatOpenAI(temperature=0, model="openfunctions")
 
 # Construct the JSON agent
 agent = create_structured_chat_agent(llm, tools, prompt)

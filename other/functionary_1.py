@@ -34,6 +34,17 @@ tools = [ # For functionary-7b-v2 we use "tools"; for functionary-7b-v1.4 we use
     }
 ]
 import time
+# start_time = time.time()
+# result = llm.create_chat_completion(
+#       messages = messages,
+#       tools=tools,
+#       tool_choice="auto",
+# )
+# end_time = time.time()
+# print("--- %s seconds ---" % (end_time - start_time))
+
+# print(result["choices"][0]["message"])
+
 start_time = time.time()
 result = llm.create_chat_completion(
       messages = messages,
@@ -42,14 +53,14 @@ result = llm.create_chat_completion(
 )
 end_time = time.time()
 print("--- %s seconds ---" % (end_time - start_time))
+print(result)
 
-print(result["choices"][0]["message"])
+# result = llm.create_chat_completion(
+#       messages = messages,
+#       tools=tools,
+#       tool_choice="auto",
+#       stream=True
+# )
 
-start_time = time.time()
-result = llm.create_chat_completion(
-      messages = messages,
-      tools=tools,
-      tool_choice="auto",
-)
-end_time = time.time()
-print("--- %s seconds ---" % (end_time - start_time))
+# for msg in result:
+#     print(msg["choices"][0]["delta"],end="")

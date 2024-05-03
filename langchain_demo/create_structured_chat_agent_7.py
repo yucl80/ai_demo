@@ -40,31 +40,38 @@ from langchain.agents.structured_chat.output_parser import (
 from langchain.agents.structured_chat.prompt import FORMAT_INSTRUCTIONS, PREFIX, SUFFIX
 from langchain.chains.llm import LLMChain
 from langchain.tools.render import ToolsRenderer, render_text_description_and_args
-from yucl.utils import create_llm
+from yucl.utils import create_llm, log_output
+
+from langchain_core.utils.function_calling import convert_to_openai_tool
 
 
 @tool
-def get_current_weather(location: str,) -> str:
+def get_current_weather(
+    location: str,
+) -> str:
     """Get the current weather in a given location."""
     print("call get_current_weather")
     return f"The weather in {location} is sunny today."
+
 
 # print(multiply.name)
 # print(multiply.description)
 # print(multiply.args)
 
 pythonREPLTool = PythonREPLTool()
-
-prompt = hub.pull("hwchase17/structured-chat-agent")
+prompt = hub.pull("hwchase17/openai-functions-agent")
+# prompt = hub.pull("hwchase17/structured-chat-agent")
 # prompt.pretty_print()
 
 llm = create_llm(model="openfunctions")
 
-chatglm = create_llm(model="chatglm3")
+# chatglm = create_llm(model="chatglm3")
+
+
 
 
 # 定义工具
-tools = [get_current_weather,pythonREPLTool]
+tools = [get_current_weather, pythonREPLTool]
 
 
 def create_structured_chat_agent_x(
@@ -76,32 +83,25 @@ def create_structured_chat_agent_x(
     stop_sequence: Union[bool, List[str]] = True,
 ) -> Runnable:
 
-    missing_vars = {"tools", "tool_names", "agent_scratchpad"}.difference(
-        prompt.input_variables
+    missing_vars = {"agent_scratchpad"}.difference(
+        prompt.input_variables + list(prompt.partial_variables)
     )
     if missing_vars:
         raise ValueError(f"Prompt missing required variables: {missing_vars}")
 
-    prompt = prompt.partial(
-        tools=tools_renderer(list(tools)),
-        tool_names=", ".join([t.name for t in tools]),
-    )
-    if stop_sequence:
-        stop = ["\nObservation"] if stop_sequence is True else stop_sequence
-        llm_with_stop = llm.bind(stop=stop)
-    else:
-        llm_with_stop = llm
-            
+    llm_with_tools = llm.bind(tools=[convert_to_openai_tool(tool) for tool in tools])
 
     agent = (
         RunnablePassthrough.assign(
             agent_scratchpad=lambda x: format_to_openai_tool_messages(
                 x["intermediate_steps"]
-            ),
+            )
         )
         | prompt
-        | llm_with_stop
+        | llm_with_tools
         | OpenAIToolsAgentOutputParser()
+       
+        | log_output
     )
     return agent
 
@@ -118,11 +118,49 @@ agent_executor = AgentExecutor(
     tools=tools,
     handle_parsing_errors=True,
     verbose=True,
-    return_intermediate_steps=True,
+    return_intermediate_steps=False,
 )
 st = time.perf_counter()
 # rep = agent_executor.invoke(  { "input": "Take 3 to the fifth power and multiply that by the sum of twelve and three, then square the whole result"   })
 rep = agent_executor.invoke({"input": "what's the weather like in  San Francisco?"})
 et = time.perf_counter() - st
 print("search time:", et)
-print(rep)
+# print(rep)
+
+# for event in agent_executor.astream_events(
+#     {"input": "where is the cat hiding? what items are in that location?"},
+#     version="v1",
+# ):
+#     kind = event["event"]
+#     if kind == "on_chain_start":
+#         if (
+#             event["name"] == "Agent"
+#         ):  # Was assigned when creating the agent with `.with_config({"run_name": "Agent"})`
+#             print(
+#                 f"Starting agent: {event['name']} with input: {event['data'].get('input')}"
+#             )
+#     elif kind == "on_chain_end":
+#         if (
+#             event["name"] == "Agent"
+#         ):  # Was assigned when creating the agent with `.with_config({"run_name": "Agent"})`
+#             print()
+#             print("--")
+#             print(
+#                 f"Done agent: {event['name']} with output: {event['data'].get('output')['output']}"
+#             )
+#     if kind == "on_chat_model_stream":
+#         content = event["data"]["chunk"].content
+#         if content:
+#             # Empty content in the context of OpenAI means
+#             # that the model is asking for a tool to be invoked.
+#             # So we only print non-empty content
+#             print(content, end="|")
+#     elif kind == "on_tool_start":
+#         print("--")
+#         print(
+#             f"Starting tool: {event['name']} with inputs: {event['data'].get('input')}"
+#         )
+#     elif kind == "on_tool_end":
+#         print(f"Done tool: {event['name']}")
+#         print(f"Tool output was: {event['data'].get('output')}")
+#         print("--")

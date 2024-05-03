@@ -10,16 +10,15 @@ Each function demonstrates a different aspect of the API's capabilities, showcas
 and handle responses.
 """
 
-from yucl.utils import get_api_token
+
 from openai import OpenAI
 import os
 import time
 
 base_url = "http://127.0.0.1:8000/v1/"
-# base_url = "https://open.bigmodel.cn/api/paas/v4/"
-os.environ["OPENAI_API_KEY"] = get_api_token()
 
-client = OpenAI(base_url=base_url)
+
+client = OpenAI(base_url=base_url,api_key="YOUR_API_KEY")
 
 
 def function_chat():
@@ -55,14 +54,16 @@ def function_chat():
         messages=messages,
         tools=tools,
         tool_choice="auto",
-        stream=False,
+        stream=True,
     )
-    if response:
-        print(response)
-        # content = response.choices[0].message.content
-        # print(content)
-    else:
-        print("Error:", response.status_code)
+    for r in response:
+        print(r)
+    # if response:
+    #     print(response)
+    #     # content = response.choices[0].message.content
+    #     # print(content)
+    # else:
+    #     print("Error:", response.status_code)
 
 
 if __name__ == "__main__":

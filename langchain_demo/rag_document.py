@@ -25,7 +25,7 @@ class SuppressStdout:
 
 # load the pdf and split it into chunks
 #loader = OnlinePDFLoader("https://d18rn0p25nwr6d.cloudfront.net/CIK-0001813756/975b3e9b-268e-4798-a9e4-2a9a7c92dc10.pdf")
-loader = PyPDFLoader("/home/test/src/data.pdf")
+loader = PyPDFLoader("/home/test/src/601318_20240322_QFI4.pdf")
 data = loader.load()
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -54,7 +54,7 @@ while True:
         template=template,
     )
     
-    llm = ChatOpenAI(model="llama-3-8b",base_url="http://localhost:8000/v1", api_key="YOUR_API_KEY", callback_manager=CallbackManager([StreamingStdOutCallbackHandler()])) 
+    llm = ChatOpenAI(model="chatglm3",base_url="http://localhost:8000/v1", api_key="YOUR_API_KEY", callback_manager=CallbackManager([StreamingStdOutCallbackHandler()])) 
 
     # llm = Ollama(model="llama2:13b", callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]))
     qa_chain = RetrievalQA.from_chain_type(

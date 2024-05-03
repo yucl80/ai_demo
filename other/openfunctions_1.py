@@ -130,15 +130,18 @@ output = llm(user_prompt,
              max_tokens=512,  # Generate up to 512 tokens
              stop=["<|EOT|>"],
              echo=False,       # Whether to echo the prompt
-
+             stream=True
              )
 
-pprint.pprint(output)
+for m in output:
+    print(m["choices"][0]["text"],end="")
 
-fn_call_string, function_call_dict = format_response(
-    output["choices"][0]["text"])
-print("--------------------")
-print(f"Function call strings 1(s): {fn_call_string}")
-print("--------------------")
-print(f"OpenAI compatible `function_call`: {function_call_dict}")
-print("--------------------")
+# pprint.pprint(output)
+
+# fn_call_string, function_call_dict = format_response(
+#     output["choices"][0]["text"])
+# print("--------------------")
+# print(f"Function call strings 1(s): {fn_call_string}")
+# print("--------------------")
+# print(f"OpenAI compatible `function_call`: {function_call_dict}")
+# print("--------------------")

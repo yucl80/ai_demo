@@ -17,8 +17,16 @@ tokenizer = LlamaTokenizerFast.from_pretrained(
 # tokenizer = PreTrainedTokenizerFast(
 #     tokenizer_file="/home/test/.cache/huggingface/hub/models--meetkai--functionary-small-v2.4-GGUF/snapshots/a0d171eb78e02a58858c464e278234afbcf85c5c/tokenizer.json")
 
+messages=[
+    {'role': 'system', 'content': 'You are a helpful assistant. Make sure to use the tavily_search_results_json tool for information.'}, 
+    {'role': 'user', 'content': 'what is LangChain?'},
+    {'role': 'assistant', 'content': None, 
+        'tool_calls': [{'id': 'call_C4df2xd6obyxQeeegMj0otNM', 'type': 'function', 'function': {'name': 'tavily_search_results_json', 'arguments': '"{\\"query\\": \\"\\\\\\"LangChain definition\\\\\\"\\"}"'}
+                        }]
+    }]
+
 template = tokenizer.apply_chat_template(
-    [{"role": "system", "content": "you are a bot"},{"role": "user", "content": "show me the memory"}])
+    messages)
 print(template)
 #print(fast_tokenizer)
 

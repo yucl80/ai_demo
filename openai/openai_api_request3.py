@@ -82,7 +82,7 @@ def function_chat():
         messages=messages,
         # tools=tools,
         tool_choice="auto",
-        stream=False,
+        stream=True,
     )
     if response:
         print(response)

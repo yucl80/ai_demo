@@ -8,7 +8,7 @@ client = openai.AsyncOpenAI(
 
 async def main():
     stream = await client.completions.create(
-        model="mixtral-8x7b-instruct",
+        model="llama-3-8b",
         prompt="请编一个关于人类登录月球的故事",
         stream=True,
         max_tokens=200,

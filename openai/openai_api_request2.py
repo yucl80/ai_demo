@@ -5,7 +5,7 @@ base_url = "http://127.0.0.1:8000/v1/"
 # base_url = "https://open.bigmodel.cn/api/paas/v1/"
 client = OpenAI(api_key="APIKEY", base_url=base_url)
 
-model_id = "llama-3-8b"
+model_id = "openfunctions"
 
 
 def function_chat():
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     #    simple_chat(use_stream=True)
 
     begin_time = time.time()
-    simple_chat(use_stream=False)
+    simple_chat(use_stream=True)
     # embedding()
     # function_chat()
     end_time = time.time()
