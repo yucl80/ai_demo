@@ -42,8 +42,11 @@ from llama_cpp.server.types import (
     DetokenizeInputResponse,
 )
 
-from llama_cpp.llama_types import (ChatCompletionStreamResponseChoice,
-                                   ChatCompletionStreamResponseDelta, ChatCompletionStreamResponseDeltaEmpty)
+from llama_cpp.llama_types import (
+    ChatCompletionStreamResponseChoice,
+    ChatCompletionStreamResponseDelta,
+    ChatCompletionStreamResponseDeltaEmpty,
+)
 
 from llama_cpp.server.errors import RouteErrorHandler
 
@@ -118,10 +121,8 @@ def create_app(
                     json.dumps(yaml.safe_load(f))
                 )
             else:
-                config_file_settings = ConfigFileSettings.model_validate_json(
-                    f.read())
-            server_settings = ServerSettings.model_validate(
-                config_file_settings)
+                config_file_settings = ConfigFileSettings.model_validate_json(f.read())
+            server_settings = ServerSettings.model_validate(config_file_settings)
             model_settings = config_file_settings.models
 
     if server_settings is None and model_settings is None:
@@ -135,8 +136,7 @@ def create_app(
     ), "server_settings and model_settings must be provided together"
 
     set_server_settings(server_settings)
-    middleware = [Middleware(RawContextMiddleware,
-                             plugins=(RequestIdPlugin(),))]
+    middleware = [Middleware(RawContextMiddleware, plugins=(RequestIdPlugin(),))]
     app = FastAPI(
         middleware=middleware,
         title="🦙 llama.cpp Python API",
@@ -181,8 +181,7 @@ async def get_event_publisher(
         except anyio.get_cancelled_exc_class() as e:
             print("disconnected")
             with anyio.move_on_after(1, shield=True):
-                print(
-                    f"Disconnected from client (via refresh/close) {request.client}")
+                print(f"Disconnected from client (via refresh/close) {request.client}")
                 raise e
 
 
@@ -476,7 +475,8 @@ async def create_chat_completion(
         chatglm_pipeline = llama
         if body.stream:
             iterator = chatglm.stream_chat(
-                chatglm_pipeline, body,  max_context_length, num_threads)
+                chatglm_pipeline, body, max_context_length, num_threads
+            )
             send_chan, recv_chan = anyio.create_memory_object_stream(10)
             return EventSourceResponse(
                 recv_chan,
@@ -490,10 +490,42 @@ async def create_chat_completion(
                 ping_message_factory=_ping_message_factory,
             )
         else:
-            return await chatglm.create_chat_completion(chatglm_pipeline,  body, max_context_length, num_threads)
+            return chatglm.create_chat_completion(
+                chatglm_pipeline, body, max_context_length, num_threads
+            )
+    if body.model == "functionary" and body.stream:        
+        iterator = extends.functionary_stream_chat( body, llama)
+        send_chan, recv_chan = anyio.create_memory_object_stream(10)
+        return EventSourceResponse(
+            recv_chan,
+            data_sender_callable=partial(  # type: ignore
+                get_event_publisher,
+                request=request,
+                inner_send_chan=send_chan,
+                iterator=iterator,
+            ),
+            sep="\n",
+            ping_message_factory=_ping_message_factory,
+        )        
 
-    elif body.model == "openfunctions":
-        return extends.handle_openfunction(body, llama)
+    elif body.model == "openfunctions":       
+        if body.stream:
+            iterator = extends.openfunction_stream_chat( body, llama)
+            send_chan, recv_chan = anyio.create_memory_object_stream(10)
+            return EventSourceResponse(
+                recv_chan,
+                data_sender_callable=partial(  # type: ignore
+                    get_event_publisher,
+                    request=request,
+                    inner_send_chan=send_chan,
+                    iterator=iterator,
+                ),
+                sep="\n",
+                ping_message_factory=_ping_message_factory,
+            )
+        else:
+            return extends.handle_openfunction(body, llama)
+
     elif body.model == "firefunction":
         return extends.handle_firefunction(body, llama)
     else:
@@ -566,8 +598,7 @@ async def tokenize(
     body: TokenizeInputRequest,
     llama_proxy: LlamaProxy = Depends(get_llama_proxy),
 ) -> TokenizeInputResponse:
-    tokens = llama_proxy(body.model).tokenize(
-        body.input.encode("utf-8"), special=True)
+    tokens = llama_proxy(body.model).tokenize(body.input.encode("utf-8"), special=True)
 
     return TokenizeInputResponse(tokens=tokens)
 
@@ -582,8 +613,7 @@ async def count_query_tokens(
     body: TokenizeInputRequest,
     llama_proxy: LlamaProxy = Depends(get_llama_proxy),
 ) -> TokenizeInputCountResponse:
-    tokens = llama_proxy(body.model).tokenize(
-        body.input.encode("utf-8"), special=True)
+    tokens = llama_proxy(body.model).tokenize(body.input.encode("utf-8"), special=True)
 
     return TokenizeInputCountResponse(count=len(tokens))
 

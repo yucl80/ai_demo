@@ -2,10 +2,28 @@ from llama_cpp.server.types import (
     CreateCompletionRequest,
     CreateEmbeddingRequest,
     CreateChatCompletionRequest,
+    ChatCompletionRequestMessage,
+)
+from llama_cpp.llama_types import (
+    ChatCompletionResponseChoice,
+    ChatCompletionMessageToolCall,
+    ChatCompletionStreamResponseChoice,
+    CreateChatCompletionStreamResponse,
+    CompletionUsage,
+    ChatCompletionStreamResponseDelta,
+    CreateChatCompletionResponse,
+    ChatCompletionResponseMessage,
+    ChatCompletionRequestAssistantMessage,
+    ChatCompletionMessageToolCallFunction,
+    ChatCompletionStreamResponseDeltaEmpty,
+    ChatCompletionMessageToolCallChunk,
+    ChatCompletionMessageToolCallChunkFunction,
 )
 import json
 import uuid
 import ast
+import llama_cpp
+import time
 
 
 def process_ast_node(node):
@@ -87,7 +105,7 @@ def get_openfunctions_prompt(messages: list = [], functions: list = []) -> str:
     Returns:
     - str: The formatted conversation prompt.
     """
-    system = "You are an AI programming assistant" #, utilizing the Gorilla LLM model, developed by Gorilla LLM, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer."
+    system = "You are an AI programming assistant"  # , utilizing the Gorilla LLM model, developed by Gorilla LLM, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer."
     if len(messages) > 0:
         if messages[0]["role"] == "system":
             system = messages[0]["content"]
@@ -105,7 +123,7 @@ def get_openfunctions_prompt(messages: list = [], functions: list = []) -> str:
     if len(functions) == 0:
         return f"{system}\n### Instruction: <<question>> {user_query}\n### Response: "
     functions_string = json.dumps(functions)
-    result = f"<｜begin▁of▁sentence｜>{system}\n### Instruction: <<function>>{functions_string}\n{user_query}### Response: "
+    result = f"<｜begin▁of▁sentence｜>{system}\n### Instruction: <<function>>{functions_string}\n{user_query} ### Response: "
 
     print(result)
     return result
@@ -120,16 +138,17 @@ def format_response(response):
         tool_calls = []
         for function_call in calls:
             fc = parse_function_call(function_call)
-            tool_calls.append(
-                {
-                    "id": "call_" + uuid.uuid4().hex,
-                    "function": {
-                        "name": fc["name"],
-                        "arguments": json.dumps(fc["arguments"]),
-                    },
-                    "type": "function",
-                }
-            )
+            if fc is not None:
+                tool_calls.append(
+                    {
+                        "id": "call_" + uuid.uuid4().hex,
+                        "function": {
+                            "name": fc["name"],
+                            "arguments": json.dumps(fc["arguments"]),
+                        },
+                        "type": "function",
+                    }
+                )
         result.append(
             {
                 "finish_reason": choice["finish_reason"],
@@ -170,6 +189,143 @@ def handle_openfunction(body: CreateCompletionRequest, llama) -> any:
             "total_tokens": response["usage"]["total_tokens"],
         },
     }
+
+
+def openfunction_stream_chat(body: CreateCompletionRequest, llama) -> any:
+    tools = body.tools
+    if tools is None:
+        tools = []
+    user_prompt = get_openfunctions_prompt(body.messages, tools)
+    if tools is None:
+        for chunk in llama(
+            user_prompt,
+            stop=["<|EOT|>"],
+            temperature=body.temperature,
+            top_p=body.top_p,
+            max_tokens=body.max_tokens,
+            stream=True,
+        ):
+            choices = [
+                ChatCompletionStreamResponseChoice(
+                    index=1,
+                    delta=ChatCompletionStreamResponseDelta(
+                        content=choice["text"],
+                    ),
+                    finish_reason=choice["finish_reason"],
+                    logprobs=choice["logprobs"],
+                )
+                for choice in chunk["choices"]
+            ]
+            chatCompletionChunk = llama_cpp.ChatCompletionChunk(
+                id="chatcmpl-" + uuid.uuid4().hex,
+                model=body.model,
+                object="chat.completion.chunk",
+                created=int(time.time()),
+                choices=choices,
+            )
+            yield chatCompletionChunk
+    else:
+        response = llama(
+            user_prompt,
+            stop=["<|EOT|>"],
+            temperature=body.temperature,
+            top_p=body.top_p,
+            max_tokens=body.max_tokens,
+            stream=False,
+        )
+        tool_calls = format_response(response)
+        choices = response["choices"]
+        stream_response_choices = []
+        choices_index = 0
+        for choice in choices:
+            text = choice["text"]
+            calls = strip_function_calls(text)
+            tool_calls = []
+            index = 0
+            for function_call in calls:
+                fc = parse_function_call(function_call)
+                if fc is not None:
+                    tool_calls.append(
+                        ChatCompletionMessageToolCallChunk(
+                            index=index,
+                            id="call_" + uuid.uuid4().hex,
+                            type="function",
+                            function=ChatCompletionMessageToolCallChunkFunction(
+                                name=fc["name"],
+                                arguments=json.dumps(fc["arguments"]),
+                            ),
+                        )
+                    )
+                index += 1
+            stream_response_choices.append(
+                ChatCompletionStreamResponseChoice(
+                    index=choices_index,
+                    delta=ChatCompletionStreamResponseDelta(
+                        content=json.dumps(calls),
+                        finish_reason=choice["finish_reason"],
+                        logprobs=choice["logprobs"],
+                        tool_calls=tool_calls,
+                    ),
+                )
+            )
+            choices_index += 1
+
+        chatCompletionChunk = llama_cpp.ChatCompletionChunk(
+            id="chatcmpl-" + uuid.uuid4().hex,
+            model=body.model,
+            object="chat.completion.chunk",
+            created=int(time.time()),
+            choices=stream_response_choices,
+        )
+        yield chatCompletionChunk
+
+
+def functionary_stream_chat(body: CreateCompletionRequest, llama) -> any:
+    response = llama.create_chat_completion(
+        messages=body.messages, tools=body.tools, tool_choice="auto", stream=False
+    ) 
+    stream_response_choices = []
+    choices = response["choices"]
+    choices_index = 0
+    for choice in choices:
+        tool_calls = []
+        calls = choice["message"]["tool_calls"]
+        index = 0
+        for call in calls:
+            tool_calls.append(
+                ChatCompletionMessageToolCallChunk(
+                    index=index,
+                    id=call["id"],
+                    type=call["type"],
+                    function=ChatCompletionMessageToolCallChunkFunction(
+                        name=call["function"]["name"],
+                        arguments=json.dumps(call["function"]["arguments"]),
+                    ),
+                )
+            )
+            index += 1
+        stream_response_choices.append(
+            ChatCompletionStreamResponseChoice(
+                index=choices_index,
+                delta=ChatCompletionStreamResponseDelta(
+                    content=None,
+                    finish_reason=choice["finish_reason"],
+                    logprobs=choice["logprobs"],
+                    tool_calls=tool_calls,
+                ),
+            )
+        )
+        choices_index += 1
+
+    chatCompletionChunk = llama_cpp.ChatCompletionChunk(
+        id=response["id"],
+        model=body.model,
+        object="chat.completion.chunk",
+        created=response["created"],
+        choices=stream_response_choices,
+    )
+    print(chatCompletionChunk)
+    yield chatCompletionChunk
 
 
 def handle_firefunction(body: CreateChatCompletionRequest, llama) -> any:

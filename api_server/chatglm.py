@@ -64,16 +64,17 @@ def stream_chat(chatglm_pipeline: chatglm_cpp.Pipeline, body: ChatCompletionRequ
             finish_reason=None,
             logprobs=None,
         )]
-        yield llama_cpp.ChatCompletionChunk(
+        chunk= llama_cpp.ChatCompletionChunk(
             id="chatcmpl-" + uuid.uuid4().hex,
             model=body.model,
             object="chat.completion.chunk",
             created=int(time.time()),
             choices=choices,
-        )
+        )       
+        yield chunk
 
 
-async def create_chat_completion(chatglm_pipeline: chatglm_cpp.Pipeline, body: ChatCompletionRequestMessage, max_context_length: int, num_threads: int) -> CreateChatCompletionResponse:
+def create_chat_completion(chatglm_pipeline: chatglm_cpp.Pipeline, body: ChatCompletionRequestMessage, max_context_length: int, num_threads: int) -> CreateChatCompletionResponse:
     def to_json_arguments(arguments):
         def tool_call(**kwargs):
             return kwargs
@@ -148,7 +149,7 @@ async def create_chat_completion(chatglm_pipeline: chatglm_cpp.Pipeline, body: C
             )
         ]
 
-    return CreateChatCompletionResponse(
+    response = CreateChatCompletionResponse(
         id="chatcmpl",
         object="chat.completion",
         created=int(time.time()),
@@ -160,3 +161,5 @@ async def create_chat_completion(chatglm_pipeline: chatglm_cpp.Pipeline, body: C
             total_tokens=prompt_tokens + completion_tokens,
         ),
     )
+    print(response)
+    return response

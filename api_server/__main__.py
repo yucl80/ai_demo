@@ -48,7 +48,7 @@ def main():
         "--config_file",
         type=str,
         help="Path to a config file to load.",
-        default="/home/test/test.cfg",
+        default="/home/test/api_server.cfg",
     )
     server_settings: ServerSettings | None = None
     model_settings: list[ModelSettings] = []
