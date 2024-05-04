@@ -13,11 +13,11 @@ scores = reranker.compute_score([['I love you', '我爱你'], ['I love you', 'i 
 print(scores)
 
 
-corpus = [
-    '我爱你', 'I like you', '我喜欢你', 'I hate you', '我不爱你', 'I don\'t like you'
-]
+# corpus = [
+#     '我爱你', 'I like you', '我喜欢你', 'I hate you', '我不爱你', 'I don\'t like you'
+# ]
 
-bm25 = BM25Okapi(corpus)
-query = "I love you"
-r = bm25.get_top_n(query, corpus, n=6)
-print(r)
+# bm25 = BM25Okapi(corpus)
+# query = "I love you"
+# r = bm25.get_top_n(query, corpus, n=2)
+# print(r)

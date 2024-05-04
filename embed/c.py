@@ -4,12 +4,14 @@ import torch
 from huggingface_hub import login
 login(token="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")
 
+text = "BGE M3 is an embedding model supporting dense retrieval, lexical matching and multi-vector interaction."
+
 from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('BAAI/bge-large-zh-v1.5')
 _model = torch.compile(model)
 model.encode(["你好，世界！"])
 st = time.perf_counter()
-embeddings_1 = _model.encode(sentences_1, normalize_embeddings=True)
+embeddings_1 = _model.encode([text], normalize_embeddings=True)
 et = time.perf_counter()
 print(et - st)
 
@@ -18,10 +20,10 @@ print(et - st)
 
 from llama_cpp import Llama
 model = Llama("/home/test/llm-models/bge-large-zh-v1.5-q4_k_m.gguf", embedding=True,verbose=False)
-model.embed(["你好，世界！"])
+print(model.embed("你好，世界！"))
 
 st = time.perf_counter()
-embed = model.embed(sentences_1)
+embed = model.embed([text])
 et = time.perf_counter()
 print(et - st)
 

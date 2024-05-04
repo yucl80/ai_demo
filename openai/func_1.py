@@ -3,7 +3,7 @@ from openai import OpenAI
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 from termcolor import colored  
 
-GPT_MODEL = "gpt-3.5-turbo-0613"
+GPT_MODEL = "llama-3-8b"
 client = OpenAI(base_url="http://127.0.0.1:8000/v1/",api_key="NO-API-KEY")
 
 @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
@@ -95,48 +95,48 @@ tools = [
 messages = []
 messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."})
 messages.append({"role": "user", "content": "What's the weather like today"})
-# chat_response = chat_completion_request(
-#     messages, tools=tools
-# )
+chat_response = chat_completion_request(
+    messages, tools=tools
+)
 
-# assistant_message = chat_response.choices[0].message
-# messages.append(assistant_message)
+assistant_message = chat_response.choices[0].message
+messages.append(assistant_message)
 
 
-# print(chat_response)
+print(chat_response)
 
-# messages.append({"role": "user", "content": "I'm in Glasgow, Scotland."})
-# chat_response = chat_completion_request(
-#     messages, tools=tools
-# )
-# assistant_message = chat_response.choices[0].message
-# messages.append(assistant_message)
-# print(assistant_message)
+messages.append({"role": "user", "content": "I'm in Glasgow, Scotland."})
+chat_response = chat_completion_request(
+    messages, tools=tools
+)
+assistant_message = chat_response.choices[0].message
+messages.append(assistant_message)
+print(assistant_message)
 
-# messages = []
-# messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."})
-# messages.append({"role": "user", "content": "what is the weather going to be like in Glasgow, Scotland over the next x days"})
-# chat_response = chat_completion_request(
-#     messages, tools=tools
-# )
-# assistant_message = chat_response.choices[0].message
-# messages.append(assistant_message)
-# print(assistant_message)
+messages = []
+messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."})
+messages.append({"role": "user", "content": "what is the weather going to be like in Glasgow, Scotland over the next x days"})
+chat_response = chat_completion_request(
+    messages, tools=tools
+)
+assistant_message = chat_response.choices[0].message
+messages.append(assistant_message)
+print(assistant_message)
 
-# in this cell we force the model to use get_n_day_weather_forecast
-# messages = []
-# messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."})
-# messages.append({"role": "user", "content": "Give me a weather report for Toronto, Canada."})
-# chat_response = chat_completion_request(
-#     messages, tools=tools, tool_choice={"type": "function", "function": {"name": "get_n_day_weather_forecast"}}
-# )
-# print(chat_response.choices[0].message)
+#in this cell we force the model to use get_n_day_weather_forecast
+messages = []
+messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."})
+messages.append({"role": "user", "content": "Give me a weather report for Toronto, Canada."})
+chat_response = chat_completion_request(
+    messages, tools=tools, tool_choice={"type": "function", "function": {"name": "get_n_day_weather_forecast"}}
+)
+print(chat_response.choices[0].message)
 
 messages = []
 messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."})
 messages.append({"role": "user", "content": "what is the weather going to be like in San Francisco and Glasgow over the next 4 days"})
 chat_response = chat_completion_request(
-    messages, tools=tools, model='gpt-3.5-turbo-1106'
+    messages, tools=tools, model=GPT_MODEL
 )
 
 assistant_message = chat_response.choices[0].message.tool_calls

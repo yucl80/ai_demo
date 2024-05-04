@@ -10,7 +10,7 @@ class Multiply(BaseModel):
     b: int = Field(..., description="Second integer")
 
 
-llm = ChatOpenAI(model="llama-3-8b",base_url="http://localhost:8000/v1", api_key="YOUR_API_KEY") 
+llm = ChatOpenAI(model="chatglm3",base_url="http://localhost:8000/v1", api_key="YOUR_API_KEY") 
 
 llm_with_tools = llm.bind_tools([Multiply])
 

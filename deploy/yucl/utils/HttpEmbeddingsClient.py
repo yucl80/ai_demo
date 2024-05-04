@@ -12,7 +12,7 @@ class HttpEmbeddingsClient(BaseModel, Embeddings):
     
     client : Any
     
-    model: str = "bge-large-zh-1.5"
+    model: str = "bge-large-zh-v1.5"
     
     def __init__(self, **kwargs: Any):
         """Initialize the sentence_transformer."""

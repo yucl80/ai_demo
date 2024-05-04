@@ -15,10 +15,11 @@ embeddings_1 = model.encode(sentences_1,
                             )['dense_vecs']
 st = time.perf_counter()
 
-embeddings_2 = model.encode(sentences_2)['dense_vecs']
-print(embeddings_2)
+embeddings_2 = model.encode(["BGE M3 is an embedding model supporting dense retrieval, lexical matching and multi-vector interaction."])
+
 et = time.perf_counter() - st
 print("emb time ：", et)
+print(embeddings_2['dense_vecs'])
 #similarity = embeddings_1 @ embeddings_2.T
 #print(similarity)
 # [[0.6265, 0.3477], [0.3499, 0.678 ]]

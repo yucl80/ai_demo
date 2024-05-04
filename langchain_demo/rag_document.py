@@ -3,7 +3,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain.vectorstores import Chroma
 from yucl.utils import OpenAIEmbeddings
 from langchain import PromptTemplate
-from langchain.llms import Ollama
+
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.chains import RetrievalQA
@@ -54,7 +54,7 @@ while True:
         template=template,
     )
     
-    llm = ChatOpenAI(model="chatglm3",base_url="http://localhost:8000/v1", api_key="YOUR_API_KEY", callback_manager=CallbackManager([StreamingStdOutCallbackHandler()])) 
+    llm = ChatOpenAI(model="chatglm3-q8",base_url="http://localhost:8000/v1", api_key="YOUR_API_KEY", callback_manager=CallbackManager([StreamingStdOutCallbackHandler()])) 
 
     # llm = Ollama(model="llama2:13b", callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]))
     qa_chain = RetrievalQA.from_chain_type(
