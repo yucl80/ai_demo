@@ -30,6 +30,21 @@ def get_prompt(user_query: str, functions: list = []) -> str:
     functions_string = json.dumps(functions)
     return f"{system}\n### Instruction: <<function>>{functions_string}\n<<question>>{user_query}\n### Response: "
 
+def get_prompt2(user_query: str, functions: list) -> str:
+    """
+    Generates a conversation prompt based on the user's query and a list of functions.
+
+    Parameters:
+    - user_query (str): The user's query.
+    - functions (list): A list of functions to include in the prompt.
+
+    Returns:
+    - str: The formatted conversation prompt.
+    """
+    if len(functions) == 0:
+        return f"USER: <<question>> {user_query}\nASSISTANT: "
+    functions_string = json.dumps(functions)
+    return f"USER: <<question>> {user_query} <<function>> {functions_string}\nASSISTANT: "
 
 def format_response(response: str):
     """
@@ -121,22 +136,41 @@ functions = [
     }
 ]
 
-user_prompt = get_prompt(query, functions)
+
 
 llm = Llama(model_path="/home/test/llm-models/gorilla-openfunctions-v2-q4_K_M.gguf",
             n_threads=12, n_gpu_layers=0,  verbose=False,)
 
+import time
+start_time = time.time()
+
+user_prompt = get_prompt(query, functions)
 output = llm(user_prompt,
              max_tokens=512,  # Generate up to 512 tokens
              stop=["<|EOT|>"],
              echo=False,       # Whether to echo the prompt
-             stream=True
+             stream=False
              )
+end_time = time.time()
+print("--- %s seconds ---" % (end_time - start_time))
 
-for m in output:
-    print(m["choices"][0]["text"],end="")
 
-# pprint.pprint(output)
+start_time = time.time()
+
+user_prompt = get_prompt2(query, functions)
+output = llm(user_prompt,
+             max_tokens=512,  # Generate up to 512 tokens
+             stop=["<|EOT|>"],
+             echo=False,       # Whether to echo the prompt
+             stream=False
+             )
+end_time = time.time()
+print("--- %s seconds ---" % (end_time - start_time))
+
+# for m in output:
+#     print(m["choices"][0]["text"],end="")
+
+pprint.pprint(output)
 
 # fn_call_string, function_call_dict = format_response(
 #     output["choices"][0]["text"])

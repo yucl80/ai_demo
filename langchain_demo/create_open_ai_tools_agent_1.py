@@ -74,7 +74,7 @@ tools = [ get_word_length,  multiply, add, exponentiate]
 #tools = [ ]
 
 
-llm = ChatOpenAI(model="firefunction")
+llm = ChatOpenAI(model="functionary")
 
 
 llm_with_tools = llm.bind_tools(tools)

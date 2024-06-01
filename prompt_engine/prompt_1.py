@@ -14,9 +14,9 @@ messages = [
     
 ]
 
-model_id = "firefunction"
+model_id = "functionary"
 
-response = client.chat.completions.create(model="llama-3-8b",messages=messages,temperature=0.1,tool_choice="auto");
+response = client.chat.completions.create(model=model_id,messages=messages,temperature=0.1,tool_choice="auto");
 
 
 from pprint import pprint
@@ -24,13 +24,13 @@ from pprint import pprint
 messages = [    
     {'role': 'user', 'content': 'Return a list of named entities in the text.Text: The Golden State Warriors are an American professional basketball team based in San Francisco.Named entities:.'},
 ]
-response = client.chat.completions.create(model="llama-3-8b",messages=messages,temperature=0.1,tool_choice="auto");
+response = client.chat.completions.create(model=model_id,messages=messages,temperature=0.1,tool_choice="auto");
 pprint(response)
 
 messages = [    
     {'role': 'user', 'content': 'Translate the English text to Chinese.Text: Sometimes, I\'ve believed as many as six impossible things before breakfast.Translation:'},
 ]
-response = client.chat.completions.create(model="llama-3-8b",messages=messages,temperature=0.1,tool_choice="auto");
+response = client.chat.completions.create(model=model_id,messages=messages,temperature=0.1,tool_choice="auto");
 pprint(response)
 
 prompt = """Permaculture is a design process mimicking the diversity, functionality and resilience of natural ecosystems. The principles and practices are drawn from traditional ecological knowledge of indigenous cultures combined with modern scientific understanding and technological innovations. Permaculture design provides a framework helping individuals and communities develop innovative, creative and effective strategies for meeting basic needs while preparing for and mitigating the projected impacts of climate change.
@@ -41,7 +41,7 @@ Summary:
 messages = [    
     {'role': 'user', 'content': prompt},
 ]
-response = client.chat.completions.create(model="llama-3-8b",messages=messages,temperature=0.1,tool_choice="auto");
+response = client.chat.completions.create(model=model_id,messages=messages,temperature=0.1,tool_choice="auto");
 pprint(response)
 
 prompt = """Answer the question using the context below.
@@ -52,14 +52,14 @@ Answer:
 messages = [    
     {'role': 'user', 'content': prompt},
 ]
-response = client.chat.completions.create(model="llama-3-8b",messages=messages,temperature=0.1,tool_choice="auto");
+response = client.chat.completions.create(model=model_id,messages=messages,temperature=0.1,tool_choice="auto");
 pprint(response)
 
 prompt = """There are 5 groups of students in the class. Each group has 4 students. How many students are there in the class?"""
 messages = [    
     {'role': 'user', 'content': prompt},
 ]
-response = client.chat.completions.create(model="llama-3-8b",messages=messages,temperature=0.1,tool_choice="auto");
+response = client.chat.completions.create(model=model_id,messages=messages,temperature=0.1,tool_choice="auto");
 pprint(response)
 
 prompt = """Text: The first human went into space and orbited the Earth on April 12, 1961.
@@ -70,5 +70,5 @@ Date:"""
 messages = [    
     {'role': 'user', 'content': prompt},
 ]
-response = client.chat.completions.create(model="llama-3-8b",messages=messages,temperature=0.1,tool_choice="auto");
+response = client.chat.completions.create(model=model_id,messages=messages,temperature=0.1,tool_choice="auto");
 pprint(response)

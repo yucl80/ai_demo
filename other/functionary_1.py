@@ -3,16 +3,16 @@ from llama_cpp.llama_tokenizer import LlamaHFTokenizer
 
 # We should use HF AutoTokenizer instead of llama.cpp's tokenizer because we found that Llama.cpp's tokenizer doesn't give the same result as that from Huggingface. The reason might be in the training, we added new tokens to the tokenizer and Llama.cpp doesn't handle this successfully
 llm = Llama.from_pretrained(
-    repo_id="meetkai/functionary-small-v2.4-GGUF",
-    filename="functionary-small-v2.4.Q4_0.gguf",
+    repo_id="meetkai/functionary-small-v2.5-GGUF",
+    filename="functionary-small-v2.5.Q4_0.gguf",
     chat_format="functionary-v2",
-    tokenizer=LlamaHFTokenizer.from_pretrained("meetkai/functionary-small-v2.4-GGUF"),
+    tokenizer=LlamaHFTokenizer.from_pretrained("meetkai/functionary-small-v2.5-GGUF"),
     n_gpu_layers=-1
 )
 
 
 messages = [
-    {"role": "user", "content": "what's the weather like in  San Francisco, Tokyo, and Paris?"}
+    {"role": "user", "content": "what's the weather like in  San Francisco?"}
 ]
 tools = [ # For functionary-7b-v2 we use "tools"; for functionary-7b-v1.4 we use "functions" = [{"name": "get_current_weather", "description":..., "parameters": ....}]
     {

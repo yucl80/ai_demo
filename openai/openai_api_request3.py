@@ -78,11 +78,11 @@ def function_chat():
     ]
 
     response = client.chat.completions.create(
-        model="openfunctions",
+        model="llama-3-8b",
         messages=messages,
-        # tools=tools,
+        #tools=tools,
         tool_choice="auto",
-        stream=True,
+        stream=False,
     )
     if response:
         print(response)

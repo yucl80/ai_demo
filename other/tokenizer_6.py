@@ -1,11 +1,37 @@
 
 from transformers import PreTrainedTokenizerFast, BertTokenizer
-from transformers import (AutoModelForCausalLM, LlamaForCausalLM,
-                          LlamaTokenizerFast)
-tokenizer = LlamaTokenizerFast.from_pretrained(
-    "meetkai/functionary-small-v2.4-GGUF", legacy=False)
+from transformers import (AutoModelForCausalLM, LlamaForCausalLM,PreTrainedTokenizerFast,
+                          LlamaTokenizerFast,AutoTokenizer)
 
+#tokenizer = LlamaTokenizerFast.from_pretrained( "meetkai/functionary-small-v2.5-GGUF", legacy=False)
 
+tokenizer = AutoTokenizer.from_pretrained("meetkai/functionary-small-v2.4", trust_remote_code=True)
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_current_weather",
+            "description": "Get the current weather",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city and state, e.g. San Francisco, CA"
+                    }
+                },
+                "required": ["location"]
+            }
+        }
+    }
+]
+messages = [{"role": "user", "content": "What is the weather in Istanbul and Singapore respectively?"}]
+
+final_prompt = tokenizer.apply_chat_template(messages, tools, add_generation_prompt=True, tokenize=False)
+tokenizer.padding_side = "left"
+
+print(final_prompt)
 
 # print("begin -----------------")
 # print(tokenizer)
@@ -25,7 +51,7 @@ messages=[
                         }]
     }]
 print(tokenizer.chat_template)
-tokenized_chat = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True, return_tensors='pt')
+tokenized_chat = tokenizer.apply_chat_template(messages, tools,  tokenize=False, add_generation_prompt=True, return_tensors='pt')
 print(tokenized_chat)
 # print(tokenizer.decode(tokenized_chat[0]))
 

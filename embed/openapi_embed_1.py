@@ -1,4 +1,5 @@
 from openai import OpenAI
+from langchain_community.embeddings import OpenAIEmbeddings
 
 import os
 os.environ["OPENAI_API_KEY"]="NOKEY" 
