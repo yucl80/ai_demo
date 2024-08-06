@@ -5,8 +5,5 @@ Summary: A utility package for local embeddings client
 Home-page: https://github.com/yucl80/utils
 Author: Your Name
 Author-email: your.email@example.com
-License: UNKNOWN
-Platform: UNKNOWN
-
-UNKNOWN
-
+Requires-Dist: langchain-core
+Requires-Dist: openai

@@ -1,0 +1,4 @@
+api_key: "your-openai-api-key"
+rules_file: "coding_rules.json"
+max_rules_per_check: 10
+max_workers: 5

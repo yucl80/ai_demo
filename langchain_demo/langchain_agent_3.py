@@ -3,6 +3,10 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 llm = ChatOpenAI(model="functionary", temperature=0,base_url="http://localhost:8000/v1" ,api_key="NOKEY")
 from langchain import hub
 from langchain_core.tools import tool
+import os
+
+os.environ["TAVILY_API_KEY"]="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"
+
 # Get the prompt to use - you can modify this!
 prompt = hub.pull("hwchase17/openai-functions-agent")
 

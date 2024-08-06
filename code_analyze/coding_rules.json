@@ -1,0 +1,16 @@
+{
+    "general": [
+        "Use 4 spaces for indentation",
+        "Limit lines to 79 characters",
+        "Use blank lines to separate functions and classes"
+    ],
+    "naming_conventions": [
+        "Use snake_case for function names",
+        "Use PascalCase for class names",
+        "Use UPPER_CASE for constants"
+    ],
+    "comments": [
+        "Use docstrings for functions and classes",
+        "Keep comments up-to-date with the code"
+    ]
+}
