@@ -56,7 +56,7 @@ def simple_chat(use_stream=False):
         {
             "role": "user",
             "content": "你好，给我讲一个故事，大概200字",
-        },
+        }
     ]
     response = client.chat.completions.create(
         model=model_id,
@@ -93,8 +93,8 @@ if __name__ == "__main__":
     #    simple_chat(use_stream=True)
 
     begin_time = time.time()
-    simple_chat(use_stream=True)
+    # simple_chat(use_stream=True)
     # embedding()
-    # function_chat()
+    function_chat()
     end_time = time.time()
     print("总耗时：", end_time - begin_time)
