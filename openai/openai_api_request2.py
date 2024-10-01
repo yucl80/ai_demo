@@ -80,7 +80,7 @@ def simple_chat(use_stream=False):
 
 def embedding():
     response = client.embeddings.create(
-        model="bge-large-zh-v1.5",
+        model="gte",
         # input=["你好，给我讲一个故事，大概100字"],
         input=["talk about a story, about 200 words"],
     )
@@ -94,7 +94,7 @@ if __name__ == "__main__":
 
     begin_time = time.time()
     # simple_chat(use_stream=True)
-    # embedding()
-    function_chat()
+    embedding()
+    # function_chat()
     end_time = time.time()
     print("总耗时：", end_time - begin_time)

@@ -1,6 +1,6 @@
 from ctransformers import AutoModelForCausalLM
 
-llm = AutoModelForCausalLM.from_pretrained("/home/test/llm-models/llama-2-13b-chat.Q4_K_M.gguf", model_type="llm")
+llm = AutoModelForCausalLM.from_pretrained("D:/llm/LMStudio/lmstudio-community/Qwen/gte-qwen2-7b-instruct-q4_k_m.gguf", model_type="llm")
 
 #print(llm("AI is going to"))
 embeddings = llm.embed("Hello, world!")
@@ -10,6 +10,7 @@ print(len(embeddings))
 #print(embeddings)
 
 #
+
 
 
 #for text in llm("AI is going to", stream=True):

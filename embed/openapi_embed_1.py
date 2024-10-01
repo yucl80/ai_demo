@@ -6,9 +6,9 @@ os.environ["OPENAI_API_KEY"]="NOKEY"
 client = OpenAI(base_url="http://127.0.0.1:8000/v1/")
 
 
-from yucl.utils import HttpEmbeddingsClient
+# from yucl.utils import HttpEmbeddingsClient
 #embeddings = OpenAIEmbeddings(model="bge-large-zh-v1.5",base_url="http://localhost:8000/v1",api_key="get_api_key")
-
+# 
 # embeddings = HttpEmbeddingsClient(model="bge-m3")
 # result=embeddings.embed_documents(["你好，世界！"])
 # print(len(result[0]))
@@ -24,7 +24,7 @@ from text2vec import SentenceModel, cos_sim, semantic_search, Similarity, Encode
 import torch
 
 
-corpus = ["我爱你", "我恨你" ,"我喜欢你","我讨厌你","我不喜欢你","我不爱你","I love you","I like you","I hate you","I don't like you"];
+corpus = ["我爱你", "我恨你" ,"我喜欢你","我讨厌你","我不喜欢你","我不爱你","I love you","I like you","I hate you","I don't like you"]
 
 import time
 begin_time = time.time()

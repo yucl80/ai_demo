@@ -9,6 +9,7 @@ logger.add("code_review.log", rotation="500 MB")
 
 from openai import OpenAI
 
+
 client = OpenAI(base_url=base_url, api_key=api_key)
 
 
@@ -36,7 +37,7 @@ def create_review_request(lang,old_code, new_code):
         """
     try:
         response = client.chat.completions.create(
-            model="bartowski/DeepSeek-Coder-V2-Lite-Instruct-GGUF",
+            model="deepseek-coder",
             messages=[
                 # {"role":"system","content":"As a senior business application development expert, your task is to conduct a code review."},
                 # {"role":"system","content":"作为一个名资深业务应用程序开发专家，你的任务是进行代码评审."},
@@ -61,14 +62,14 @@ def display_review_results(review):
 
 
 def summarize_impact_with_llm(review):
-    prompt = f"""请以简短的语句总结下面内容,不超过200字：    
+    prompt = f"""请以简短的语句总结下面内容,不超过1000字：    
         ```
         {review}       
         ```
         """
     try:
         response = client.chat.completions.create(
-            model="bartowski/DeepSeek-Coder-V2-Lite-Instruct-GGUF",
+            model="deepseek-coder",
             messages=[
                 # {"role":"system","content":"As a senior business application development expert, your task is to conduct a code review."},
                 # {"role":"system","content":"作为一个名资深业务应用程序开发专家，你的任务是进行代码评审."},
