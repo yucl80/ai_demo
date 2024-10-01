@@ -8,10 +8,12 @@ from sentence_transformers.util import cos_sim
 
 onnx_model_path = 'D:\llm\jina-embeddings-onnx-o2'
 # onnx_model_path ="D:\\llm\\bge-m3-onnx"
+# onnx_model_path ="D:\\llm\\bge-base-en-onnx"
+# onnx_model_path ="D:\\llm\\all12"
 
 tokenizer = AutoTokenizer.from_pretrained(onnx_model_path)
 
-model = ORTModelForCustomTasks.from_pretrained( onnx_model_path)
+model = ORTModelForCustomTasks.from_pretrained(onnx_model_path)
 
 # Function to process a batch of texts and generate embeddings
 def get_embeddings_batch(texts):
@@ -31,6 +33,10 @@ def get_embeddings_batch(texts):
     }
    
     ort_outputs = model.forward(**inputs)["sentence_embedding"]
+    # ort_outputs = model.forward(**inputs)["last_hidden_state"]
+    # print(ort_outputs)
+    
+    # ["sentence_embedding"]
     
     return ort_outputs
 
@@ -52,3 +58,12 @@ embeddings = get_embeddings_batch([
     '# for idx, x in enumerate(xs):\n    print(idx, x)',
 ])
 print(cos_sim(embeddings[0], embeddings[1]))
+
+embeddings = get_embeddings_batch([
+    'calculate maximum value',
+    'def f(a,b): if a>b: return a else return b',
+    "def f(a,b): if a<b: return a else return b"
+])
+print(cos_sim(embeddings[0], embeddings[1]))
+print(cos_sim(embeddings[0], embeddings[2]))
+print(cos_sim(embeddings[1], embeddings[2]))

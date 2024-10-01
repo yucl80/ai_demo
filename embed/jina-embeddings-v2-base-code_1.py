@@ -11,7 +11,10 @@ model = SentenceTransformer(
 model.max_seq_length = 1024
 
 embeddings = model.encode([
-    'How do I access the index while iterating over a sequence with a for loop?',
-    '# Use the built-in enumerator\nfor idx, x in enumerate(xs):\n    print(idx, x)',
+    'calculate maximum value',
+    'def f(a,b): if a>b: return a else return b',
+    "def f(a,b): if a<b: return a else return b"
 ])
 print(cos_sim(embeddings[0], embeddings[1]))
+print(cos_sim(embeddings[0], embeddings[2]))
+print(cos_sim(embeddings[1], embeddings[2]))
