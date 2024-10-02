@@ -15,3 +15,17 @@ print(embeddings @ embeddings2.T)
 
 print(cos_sim(embeddings, embeddings2))
 
+
+sentences = ['search_document: def f(a,b): if a>b: return a else return b']
+embeddings = model.encode(sentences)
+# print(embeddings)
+
+
+sentences = ['search_query: calculate maximum value?']
+embeddings2 = model.encode(sentences)
+# print(embeddings2)
+
+print(embeddings @ embeddings2.T)
+
+sentences = ['search_document: def f(a,b): if a<b: return a else return b']
+print(embeddings @ embeddings2.T)

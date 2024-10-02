@@ -1,6 +1,14 @@
 from sentence_transformers import SentenceTransformer
 import torch
 model = SentenceTransformer("Alibaba-NLP/gte-Qwen2-1.5B-instruct", trust_remote_code=True)
+
+# 对全连接层进行动态量化
+model = torch.quantization.quantize_dynamic(
+    model,  # 要量化的模型
+    {torch.nn.Linear},  # 量化的层类型（这里只对Linear层量化）
+    dtype=torch.qint8  # 使用8位量化
+)
+
 # In case you want to reduce the maximum length:
 model.max_seq_length = 8192
 
@@ -18,3 +26,25 @@ document_embeddings = model.encode(documents)
 
 scores = (query_embeddings @ document_embeddings.T) * 100
 print(scores.tolist())
+
+embeddings = model.encode([    
+    'def f(a,b): if a>b: return a else return b',
+    "def f(x,y): if x<y: return y else return x"
+])
+queries = ['get the maximum value']
+import time
+begin = time.time()
+query_embeddings = model.encode(queries, prompt_name="query")
+end = time.time()
+print("Time elapsed: ", end - begin)
+print(query_embeddings @ embeddings.T)
+print(embeddings[0] @ embeddings[1].T)
+
+text = []
+for i in range(200):
+    text.append("def f(x,y): if x<y: return y else return x "+str(i))
+begin = time.time()
+query_embeddings = model.encode(text, prompt_name="query")
+end = time.time()
+print("Time elapsed: ", end - begin)
+

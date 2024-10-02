@@ -1,6 +1,7 @@
+
 from langchain_community.embeddings import LlamaCppEmbeddings
-# llama = LlamaCppEmbeddings(model_path="/home/test/llm-models/bge-large-zh-v1.5-q4_k_m.gguf",verbose=False)
-llama = LlamaCppEmbeddings(model_path="D:\\llm\\LMStudio\\lmstudio-community\\Qwen\\stella_en_1.5B_v5.gguf",verbose=True)
+# llama = LlamaCppEmbeddings(model_path="D:\\llm\\LMStudio\\BAAI\\bge-m3-gguf\\bge-m3-q8_0.gguf",verbose=False)
+llama = LlamaCppEmbeddings(model_path="D:\\llm\\LMStudio\\lmstudio-community\\Qwen\\gte-Qwen2-1.5B-instruct-Q4_K_M.gguf",verbose=False)
 text = "This is a test document."
 # query_result = llama.embed_query(text)
 # doc_result = llama.embed_documents([text])
