@@ -11,10 +11,10 @@ model = SentenceTransformer(
 model.max_seq_length = 1024
 
 embeddings = model.encode([
-    'get the maximum value',
+    'return maximum value',
     'def f(a,b): if a>b: return a else return b',
-    'def f(x,y): if x<y: return y else return x'
-])
+    'def f(n,m): if n<m: return n else return m'
+],task="classification",prompt_name="classification")
 print(cos_sim(embeddings[0], embeddings[1]))
 print(cos_sim(embeddings[0], embeddings[2]))
 print(cos_sim(embeddings[1], embeddings[2]))

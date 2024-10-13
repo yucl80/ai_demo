@@ -10,7 +10,7 @@ import time
 # onnx_model_path = 'D:\llm\jina-embeddings-onnx-o2'
 # onnx_model_path ="D:\\llm\\bge-m3-onnx"
 # onnx_model_path ="D:\\llm\\bge-base-en-onnx"
-onnx_model_path ="D:\\llm\\jina"
+onnx_model_path ="D:\\llm\\embed\\gte-qwen2-1.5B-instruct-onnx"
 
 tokenizer = AutoTokenizer.from_pretrained(onnx_model_path)
 
@@ -62,7 +62,7 @@ print(cos_sim(embeddings[0], embeddings[1]))
 
 start = time.time()
 embeddings = get_embeddings_batch([
-    'calculate maximum value',
+    'calculate max value',
     'def f(a,b): if a>b: return a else return b',
     "def f(a,b): if a<b: return a else return b"
 ])
