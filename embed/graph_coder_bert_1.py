@@ -51,6 +51,7 @@ code_list = [
     'def f(x,y): if x>y: return y else return x'
 ]
 
+x = get_code_embedding(code_list)
 
 a = get_code_embedding(code_list[0])
 b = get_code_embedding(code_list[1])

@@ -10,7 +10,7 @@ import time
 # onnx_model_path = 'D:\llm\jina-embeddings-onnx-o2'
 # onnx_model_path ="D:\\llm\\bge-m3-onnx"
 # onnx_model_path ="D:\\llm\\bge-base-en-onnx"
-onnx_model_path ="D:\\llm\\embed\\g"
+onnx_model_path ="D:\\llm\\embed\\graphcodebert-base-onnx"
 
 tokenizer = AutoTokenizer.from_pretrained(onnx_model_path)
 
