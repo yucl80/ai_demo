@@ -16,7 +16,7 @@ from langchain.agents.format_scratchpad.openai_tools import (
 )
 from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputParser
 from langchain_core.prompts import PromptTemplate
-from yucl.utils import ChatOpenAI, pull_repo
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 langchain.debug = True
 
@@ -54,7 +54,7 @@ prompt = ChatPromptTemplate.from_messages(
      [("system", SYSTEM_PROMPT_FOR_CHAT_MODEL),("human", USER_PROMPT_FOR_CHAT_MODEL)]
 )
 
-llm = ChatOpenAI(model="openfunctions")
+llm = ChatOpenAI(model="openfunctions",base_url="http://localhost:8000/v1",api_key="nokey")
 
 
 # 定义工具

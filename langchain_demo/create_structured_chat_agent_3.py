@@ -40,7 +40,7 @@ from langchain.agents.structured_chat.output_parser import (
 from langchain.agents.structured_chat.prompt import FORMAT_INSTRUCTIONS, PREFIX, SUFFIX
 from langchain.chains.llm import LLMChain
 from langchain.tools.render import ToolsRenderer, render_text_description_and_args
-from yucl.utils import create_llm
+from langchain_openai import ChatOpenAI
 
 
 @tool
@@ -58,9 +58,9 @@ pythonREPLTool = PythonREPLTool()
 prompt = hub.pull("hwchase17/structured-chat-agent")
 # prompt.pretty_print()
 
-llm = create_llm(model="openfunctions")
+llm = ChatOpenAI(model="openfunctions",base_url="http://localhost:8000/v1",api_key="nokey")
 
-chatglm = create_llm(model="chatglm3")
+# chatglm = create_llm(model="chatglm3")
 
 
 # 定义工具

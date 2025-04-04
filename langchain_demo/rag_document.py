@@ -11,6 +11,10 @@ from langchain_openai import ChatOpenAI
 import sys
 import os
 
+from langchain.chains import NebulaGraphQAChain
+from langchain_community.graphs import NebulaGraph
+from langchain_openai import ChatOpenAI
+
 class SuppressStdout:
     def __enter__(self):
         self._original_stdout = sys.stdout

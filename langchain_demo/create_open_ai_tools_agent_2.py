@@ -18,7 +18,7 @@ from langchain.agents.format_scratchpad.openai_tools import \
     format_to_openai_tool_messages
 from langchain.agents.output_parsers.openai_tools import \
     OpenAIToolsAgentOutputParser
-from yucl.utils import create_llm
+from langchain_openai import ChatOpenAI
 prompt = hub.pull("hwchase17/openai-tools-agent")
 
 prompt.pretty_print()
@@ -44,7 +44,7 @@ pythonrepl =  PythonREPLTool()
 tools = [ multiply,add,exponentiate, pythonrepl]
 
 
-llm = create_llm()
+llm = ChatOpenAI(model="openfunctions",base_url="http://localhost:8000/v1",api_key="nokey")
 
 agent = create_openai_tools_agent(llm,tools,prompt)
 
