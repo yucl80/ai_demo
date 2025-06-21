@@ -3,3 +3,4 @@ dill==0.3.4
 tqdm
 iopath
 numpy
+urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
