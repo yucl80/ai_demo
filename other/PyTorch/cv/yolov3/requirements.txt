@@ -25,3 +25,4 @@ pandas
 # extras --------------------------------------
 # Cython  # for pycocotools https://github.com/cocodataset/cocoapi/issues/172
 thop  # FLOPS computation
+torch>=2.8.0 # not directly required, pinned by Snyk to avoid a vulnerability
